@@ -209,8 +209,11 @@ sub getToolbarTables {
     }
     my $ta = \@tableArray;
     for my $engine (@{$self->metaEngines}){
+        # TODO croak if $ta is empty /undef after massage.
+        # mb wonders if it be more clear if $ta be an lvalue, too:
+        # $ta = $engine->massageToolbarTables($ta);
         $engine->massageToolbarTables($ta);
-    }    
+    }
     return $ta;
 }
 
@@ -348,7 +351,7 @@ sub getReferencedRecord {
                                      }]);
     my $sth = $dbh->prepare($query);
     $sth->execute;
-    
+
     my $fPkVal = $sth->fetchrow_hashref()->{$fPkId};
     warn "fPkVal=$fPkVal";
     my $fRec = $self->getRecordDeref($fTableId, $fPkVal);

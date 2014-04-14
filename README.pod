@@ -73,6 +73,12 @@ by calling
 
  cd ..
 
+put these lines in your backend/bin/dbtoria.pl to enable debugging:
+ $ENV{QX_SRC_MODE} = 1;
+ $ENV{QX_SRC_PATH} = "$FindBin::Bin/../../frontend";
+
+It is also heplful to enable your Chrome developer console (<ctrl>-<shift>-j) or your Firefox bugzilla console to see possible frontend issues.
+
 =head2 Have Fun(tm)
 
 Run DbToRia with its built-in webserver

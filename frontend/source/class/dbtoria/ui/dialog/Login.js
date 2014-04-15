@@ -38,10 +38,11 @@ qx.Class.define("dbtoria.ui.dialog.Login", {
 
         this.getChildControl('captionbar').exclude();
 
+        var myDecorator = new qx.ui.decoration.Decorator;
+	    myDecorator.set({width: 1, style: 'solid', color: '#777'});
         this.getChildControl('pane').set({
-                // TODO bug with qx 3.5, at least.
-                //decorator       : new qx.ui.decoration.Single(1, 'solid', '#777'),
-                backgroundColor : '#f8f8f8'
+            decorator       : myDecorator,
+            backgroundColor : '#f8f8f8'
         });
 
         var grid = new qx.ui.layout.Grid(10, 10);
@@ -77,6 +78,7 @@ qx.Class.define("dbtoria.ui.dialog.Login", {
         });
 
         var password = new qx.ui.form.PasswordField();
+        this.__password = password;
 
         this.add(password, {
             row    : 2,
@@ -140,6 +142,7 @@ qx.Class.define("dbtoria.ui.dialog.Login", {
     members : {
 
         __username: null,
+        __password: null,
 
         getUsername: function() {
             return this.__username.getValue();
@@ -153,7 +156,6 @@ qx.Class.define("dbtoria.ui.dialog.Login", {
          * @return {void}
          */
         __loginHandler : function(ret, exc) {
-            console.log(exc);
             if (exc) {
                 dbtoria.ui.dialog.MsgBox.getInstance().exc(exc);
                 this.setEnabled(true);
@@ -192,8 +194,6 @@ qx.Class.define("dbtoria.ui.dialog.Login", {
                              60 : { left : (pos+20)+'px' },
                              70 : { left : (pos-20)+'px' },
                              80 : { left : pos+'px' }
-
-
                         }
                     };
                     var effect = qx.bom.element.Animation.animate(element, shake);

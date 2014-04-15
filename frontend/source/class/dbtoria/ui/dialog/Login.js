@@ -153,25 +153,56 @@ qx.Class.define("dbtoria.ui.dialog.Login", {
          * @return {void}
          */
         __loginHandler : function(ret, exc) {
+            console.log(exc);
             if (exc) {
                 dbtoria.ui.dialog.MsgBox.getInstance().exc(exc);
                 this.setEnabled(true);
             }
             else {
-                var element = this.getContainerElement().getDomElement();
+                var element = this.getContentElement().getDomElement();
+                var pos = qx.bom.element.Location.getLeft(element);
 
                 if (ret) {
                     this.fireDataEvent('login', ret);
-                    var effect = new qx.fx.effect.combination.Fold(element);
-                    effect.start();
-
-                    effect.addListener('finish', function() {
+                    var fadeOut = {
+                        duration: 1000,
+               	     	keep: 100,
+                     	keyFrames : {
+                             0 : {"opacity" : 1},
+                           100 : {"opacity": 0, display: "none"}
+                         },
+                         timing: "ease-out"
+                    };
+                    var effect = qx.bom.element.Animation.animate(element, fadeOut);
+                    effect.addListener('end', function() {
                         this.close();
                     }, this);
+                    effect.play();
                 }
                 else {
-                    var effect = new qx.fx.effect.combination.Shake(element);
-                    effect.start();
+                   var shake = {
+                        duration: 500,
+                    	keyFrames : {
+                              0 : { left : pos+'px' },
+                             10 : { left : (pos-20)+'px' },
+                             20 : { left : (pos+20)+'px' },
+                             30 : { left : (pos-20)+'px' },
+                             40 : { left : pos+'px' },
+                             50 : { left : (pos-20)+'px' },
+                             60 : { left : (pos+20)+'px' },
+                             70 : { left : (pos-20)+'px' },
+                             80 : { left : pos+'px' }
+
+
+                        }
+                    };
+                    var effect = qx.bom.element.Animation.animate(element, shake);
+                    effect.addListener('end', function() {
+                        this.__username.setValue(null);
+                        this.__password.setValue(null);
+                        this.__username.focus();
+                    }, this);
+                    effect.play();
                     this.setEnabled(true);
                 }
             }

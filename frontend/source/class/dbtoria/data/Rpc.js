@@ -41,7 +41,8 @@ qx.Class.define('dbtoria.data.Rpc', {
             var origHandler = handler;
 
             var superHandler = function(ret, exc, id) {
-                if (exc) {
+               if (exc && exc.code != 70008006) {
+                    qx.dev.Debug.debugObject(exc, 'exc=');
                     dbtoria.ui.dialog.MsgBox.getInstance().exc(exc);
                 } else {
                     origHandler(ret);

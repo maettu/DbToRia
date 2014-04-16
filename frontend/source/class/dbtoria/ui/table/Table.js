@@ -30,9 +30,17 @@ qx.Class.define("dbtoria.ui.table.Table", {
             decorator              : null
         });
         this.getDataRowRenderer().setHighlightFocusRow(false);
-        this.getTableColumnModel().setBehavior(new dbtoria.ui.table.columnmodel.resizebehavior.Enhanced());
+//        this.getTableColumnModel().setBehavior(new dbtoria.ui.table.columnmodel.resizebehavior.Enhanced());
 
         this.__createTooltip();
+        // var tableModel = this.getTableModel();
+        // this.addListener('appear', function() {
+        //     tableModel.setVisible(true);
+        //     tableModel.reloadData();
+        // }, this);
+        // this.addListener('disappear', function() {
+        //     tableModel.setVisible(false);
+        // }, this);
     },
 
     members: {
@@ -50,6 +58,7 @@ qx.Class.define("dbtoria.ui.table.Table", {
         },
 
         updateTooltip: function(text) {
+            text = '<b>'+this.__tableId+'</b><br/>'+text;
             this.__tooltip.setLabel(text);
             this.showTooltip();
         },

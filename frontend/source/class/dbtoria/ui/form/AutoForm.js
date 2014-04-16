@@ -25,6 +25,7 @@ qx.Class.define("dbtoria.ui.form.AutoForm", {
      */
     construct : function(formDesc) {
         this.base(arguments);
+//	qx.dev.Debug.debugObject(formDesc, 'formDesc');
         var fl            = formDesc.length;
         var controlMap    = this.__controlMap = {};
         var formData      = this.__formData   = {};

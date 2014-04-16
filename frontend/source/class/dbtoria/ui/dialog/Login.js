@@ -5,7 +5,7 @@
    Authors:    Tobias Oetiker
    Utf8Check:  äöü
 
-   $Id: Login.js 425 2010-12-21 07:35:07Z oetiker $
+   $Id: Login.js 99 2014-03-15 10:27:06Z zaucker $
 
 ************************************************************************ */
 
@@ -94,7 +94,7 @@ qx.Class.define("dbtoria.ui.dialog.Login", {
         });
 
         this.add(login, {
-            row     : 3,
+            row     : 4,
             column  : 0,
             colSpan : 3
         });
@@ -196,6 +196,7 @@ qx.Class.define("dbtoria.ui.dialog.Login", {
                              80 : { left : pos+'px' }
                         }
                     };
+
                     var effect = qx.bom.element.Animation.animate(element, shake);
                     effect.addListener('end', function() {
                         this.__username.setValue(null);

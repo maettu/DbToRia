@@ -7,7 +7,7 @@
 
    Utf8Check:  äöü
 
-   $Id: AdminEditor.js 333 2010-10-05 20:07:53Z oetiker $
+   $Id: RecordEdit.js 28 2013-02-05 22:53:52Z zaucker $
 
 ************************************************************************ */
 
@@ -133,7 +133,8 @@ qx.Class.define("dbtoria.module.database.RecordEdit", {
             case 'invalid':
                 break;
             case 'succeeded':
-              this.fireDataEvent('refresh', this.__recordId);
+        this.debug('Firing refresh event');
+        this.fireDataEvent('refresh', this.__recordId);
             case null:
                 this.close();
                 break;

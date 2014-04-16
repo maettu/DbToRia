@@ -82,10 +82,10 @@ Return name of the database connected to.
 sub getDatabaseName {
     my $self = shift;
     my $dsn = $self->{dsn};
-    
+
     # in sqlite the database name is the name of the file.. (?)
     (my $databaseName = $dsn ) =~ s/.*=//;
-    
+
     # ..only the file, no directories
     $databaseName =~ s|.*/||g;
 
@@ -168,7 +168,7 @@ sub getTableStructure {
             required   => $col->{NULLABLE} == 0,
             references => $foreignKeys{$id},
             primary    => $primaryKeys{$id},
-            pos        => $col->{ORDINAL_POSITION} 
+            pos        => $col->{ORDINAL_POSITION}
         };
         $typeMap{$id} = $col->{TYPE_NAME};
     }
@@ -305,7 +305,7 @@ sub getTableDataChunk {
     my @data;
     while ( my @row = $sth->fetchrow_array ) {
         my @new_row;
-        $new_row[0] = [ $row[0], $Mojo::JSON::TRUE, $Mojo::JSON::TRUE ];
+        $new_row[0] = [ $row[0], Mojo::JSON->true, Mojo::JSON->true ];
         for (my $i=1;$i<=$#row;$i++){
             $new_row[$i] = $self->dbToFe($row[$i],$typeMap->{$sth->{NAME}[$i]});
         }
@@ -349,7 +349,7 @@ sub updateTableData {
     my $update = 'UPDATE '.$dbh->quote_identifier($table);
     my $structure = $self->getTableStructure($table);
     my $primaryKey = $structure->{meta}{primary}[0];
-    my $typeMap = $structure->{typeMap}; 
+    my $typeMap = $structure->{typeMap};
 
     my @set;
     for my $key (keys %$data) {

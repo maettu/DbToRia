@@ -58,7 +58,7 @@ sub getDatabaseName {
     my $self = shift;
     my $dsn = $self->{dsn};
 
-    # extract just the database name and remove leading parameter name 
+    # extract just the database name and remove leading parameter name
     # and trailing host and port settings
     if ( $dsn =~ m/(?:dbname|db|database)=([^;]*)/ ) { # this comment to easy syntax highlighting /
             $dsn = $1;
@@ -115,7 +115,7 @@ sub getAllTables {
             type     => $tableType,
             name     => $tableName,
             remark   => $table->{REMARKS},
-            readOnly => $readOnly ? $Mojo::JSON::TRUE : $Mojo::JSON::FALSE,
+            readOnly => $readOnly ? Mojo::JSON->true : Mojo::JSON->false,
     	};
 
     }
@@ -324,7 +324,7 @@ sub getTablePrivileges {
     if (not exists $self->{tablePrivileges}{$tableId}{$username}){
         my $dbh = $self->getDbh();
         my $sth = $dbh->prepare(<<'SQL');
-SELECT privilege_type 
+SELECT privilege_type
   FROM information_schema.table_privileges WHERE table_name = ?
 SQL
         $sth->execute($tableId);
@@ -395,7 +395,7 @@ sub getTableDataChunk {
     my @data;
     while ( my @row = $sth->fetchrow_array ) {
         my @new_row;
-        $new_row[0] = [ $row[0], $Mojo::JSON::TRUE, $Mojo::JSON::TRUE ];
+        $new_row[0] = [ $row[0], Mojo::JSON->true, Mojo::JSON->true ];
         for (my $i=1;$i<=$#row;$i++){
             $new_row[$i] = $self->dbToFe($row[$i],$typeMap->{$sth->{NAME}[$i]});
         }

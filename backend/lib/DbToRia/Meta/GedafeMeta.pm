@@ -51,7 +51,7 @@ sub prepare {
 Pull in the content of the meta_tables table and make it available in the metaTables
 attribute as a hash of arrays:
 
- table => { 
+ table => {
     attribute => value,
     ...
  }
@@ -118,7 +118,7 @@ sub massageToolbarTables {
     my $self = shift;
     my $tables = shift;
     my $mt = $self->metaTables;
-    my @tbTables;    
+    my @tbTables;
     for my $table (@$tables) {
         if ($table->{tableId} !~ /^meta_(fields|tables)$/ and not defined $mt->{$table}{hide} ){
             push @tbTables, $table;
@@ -179,14 +179,14 @@ sub massageEditView {
                 $row->{type} = 'TimeField';
             }
             elsif ($widget eq 'readonly') {
-                $row->{readOnly} = $Mojo::JSON::TRUE;
+                $row->{readOnly} = Mojo::JSON->true;
             }
         }
         for my $table (keys %{$self->{metaFields}}) {
             next unless exists $self->{metaFields}{$table}{$field}{copy};
             my $copy   = $self->{metaFields}{$table}{$field}{copy};
             if ($copy) {
-                $row->{copyForward} = $Mojo::JSON::TRUE;
+                $row->{copyForward} = Mojo::JSON->true;
             }
         }
     }

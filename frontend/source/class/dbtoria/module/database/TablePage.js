@@ -67,7 +67,7 @@ qx.Class.define("dbtoria.module.database.TablePage", {
 	this.__refDelay = dbtoria.data.Config.getInstance().getRefDelay();
 	var filterOps   = dbtoria.data.Config.getInstance().getFilterOps();
 //	this.debug('filterOps='+filterOps);
-	
+
         this.__rpc = dbtoria.data.Rpc.getInstance();
         this.__buildUi(tableId, viewMode, readOnly);
         if (viewMode) {
@@ -156,7 +156,7 @@ qx.Class.define("dbtoria.module.database.TablePage", {
 
                 var rpc = dbtoria.data.Rpc.getInstance();
             // Get appropriate row from referenced table
-                rpc.callAsyncSmart(qx.lang.Function.bind(this.__referenceHandler, 
+                rpc.callAsyncSmart(qx.lang.Function.bind(this.__referenceHandler,
 							 this),
 				   'getReferencedRecord', params);
             }, this);
@@ -342,13 +342,13 @@ qx.Class.define("dbtoria.module.database.TablePage", {
 //		    that.debug('columns: i='+i);
 //		    qx.dev.Debug.debugObject(columns[i]);
                 }
-		
-                var model = 
-		    new dbtoria.data.RemoteTableModel(tableId, columnIds, 
+
+                var model =
+		    new dbtoria.data.RemoteTableModel(tableId, columnIds,
 						      columnLabels,
 						      columnReferences);
                 that.__table = new dbtoria.ui.table.Table(model, that.__tableId);
-		if (that.__refDelay > 0) { 
+		if (that.__refDelay > 0) {
 //		    that.debug('Creating timer');
 		    that.__refTimer = new qx.event.Timer(that.__refDelay);
                     that.__table.addListener('cellChange', that.__cellChange, that);
@@ -508,10 +508,11 @@ qx.Class.define("dbtoria.module.database.TablePage", {
                 row = model.getRowData(ind);
             });
             if (row) {
+                console.log("reihe: ", row, row.ROWINFO);
                 this.__currentId = row.ROWINFO[0];
-                this.__tbClone.setEnabled(row.ROWINFO[1]);
-                this.__tbEdit.setEnabled(row.ROWINFO[1]);
-                this.__tbDelete.setEnabled(row.ROWINFO[2]);
+                this.__tbClone.setEnabled(true);
+                this.__tbEdit.setEnabled(true);
+                this.__tbDelete.setEnabled(true);
             }
             else {
                 this.__tbClone.setEnabled(false);

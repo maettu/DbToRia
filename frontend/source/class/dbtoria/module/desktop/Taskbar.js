@@ -28,16 +28,16 @@ qx.Class.define("dbtoria.module.desktop.Taskbar", {
         this.add(partInfo);
         dbtoria.data.Rpc.getInstance().callAsyncSmart( function(name){
             var databaseName = new qx.ui.basic.Label().set({
-                alignY: 'middle',
-                value: name,
-                padding: 5
+                alignY  : 'middle',
+                value   : name,
+                padding : 5
             });
             partInfo.add(databaseName);
         },'getConnectionInfo');
 
         this.add(new qx.ui.toolbar.Separator());
 
-        this.__partDock = new qx.ui.toolbar.Part();       
+        this.__partDock = new qx.ui.toolbar.Part();
         this.add(this.__partDock);
 
         this.addSpacer();
@@ -60,16 +60,25 @@ qx.Class.define("dbtoria.module.desktop.Taskbar", {
             this.getOverflowMenu().add(btnO);
             this.setRemovePriority(btn, this.__priority++);
             btn.setUserData('menuBtn', btnO);
-            btn.addListener('appear', function() {
-                var pane = this.getLayoutParent();
-                this.fireDataEvent('resize', pane.getBounds());
-            }, this);
-            btn.addListener('disappear', function() {
-                var pane = this.getLayoutParent();
-                this.fireDataEvent('resize', pane.getBounds());
-            }, this);
+            btn.addListener(
+                'appear',
+                function() {
+                    var pane = this.getLayoutParent();
+                    this.fireDataEvent('resize', pane.getBounds());
+                },
+                this
+            );
+            btn.addListener(
+                'disappear',
+                function() {
+                    var pane = this.getLayoutParent();
+                    this.fireDataEvent(
+                        'resize',
+                        pane.getBounds()
+                    );
+                },
+                this
+            );
         }
-
     }
-
 });

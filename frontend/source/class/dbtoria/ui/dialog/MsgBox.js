@@ -30,7 +30,7 @@
  */
 qx.Class.define("dbtoria.ui.dialog.MsgBox", {
     extend : qx.ui.window.Window,
-    type : "singleton",
+    type   : "singleton",
 
     construct : function() {
         this.base(arguments);
@@ -60,7 +60,10 @@ qx.Class.define("dbtoria.ui.dialog.MsgBox", {
 
         var that = this;
 
-        var btn_cnl = this.__mk_btn(this.tr("Cancel"), "icon/16/actions/dialog-cancel.png");
+        var btn_cnl = this.__mk_btn(
+            this.tr("Cancel"),
+            "icon/16/actions/dialog-cancel.png"
+        );
         this.__btn_cnl = btn_cnl;
 
         btn_cnl.addListener("execute", function(e) {
@@ -73,7 +76,10 @@ qx.Class.define("dbtoria.ui.dialog.MsgBox", {
             btn_cnl.focus();
         }, this);
 
-        var btn_app = this.__mk_btn(this.tr("Apply"), "icon/16/actions/dialog-apply.png");
+        var btn_app = this.__mk_btn(
+            this.tr("Apply"),
+            "icon/16/actions/dialog-apply.png"
+        );
         this.__btn_app = btn_app;
 
         btn_app.addListener("execute", function(e) {
@@ -82,16 +88,23 @@ qx.Class.define("dbtoria.ui.dialog.MsgBox", {
 
         box.add(btn_app);
 
-        var btn_ok = this.__mk_btn(this.tr("OK"), "icon/16/actions/dialog-ok.png");
+        var btn_ok = this.__mk_btn(
+            this.tr("OK"),
+            "icon/16/actions/dialog-ok.png"
+        );
         this.__btn_ok = btn_ok;
 
         btn_ok.addListener("execute", function(e) {
             that.close();
         });
 
-        btn_ok.addListener('appear', function(e) {
-            btn_ok.focus();
-        }, this);
+        btn_ok.addListener(
+            'appear',
+            function(e) {
+                btn_ok.focus();
+            },
+            this
+        );
 
         box.add(btn_ok);
 
@@ -99,8 +112,8 @@ qx.Class.define("dbtoria.ui.dialog.MsgBox", {
     },
 
     members : {
-        __body : null,
-        __btn_ok : null,
+        __body    : null,
+        __btn_ok  : null,
         __btn_app : null,
         __btn_cnl : null,
 
@@ -134,7 +147,8 @@ qx.Class.define("dbtoria.ui.dialog.MsgBox", {
          * @return {Button} button widget
          */
         __mk_btn : function(lab, ico) {
-            var btn = new qx.ui.form.Button(lab, ico).set({ minWidth : 40 });
+            var btn = new qx.ui.form.Button(lab, ico)
+                            .set({ minWidth : 40 });
             return btn;
         },
 
@@ -172,10 +186,15 @@ qx.Class.define("dbtoria.ui.dialog.MsgBox", {
             this.__btn_ok.focus();
             var trace = '';
 
-            //            if (exc.code == 2) {
-            //               trace = "<br/>Stack Trace: " + qx.dev.StackTrace.getStackTrace().join("<br/>");
-            //            }
-            this.__open(this.tr('RPC Error %1', exc.code), this.tr('%1 (Error Code %2)%3', exc.message, exc.code, trace));
+            this.__open(
+                this.tr('RPC Error %1', exc.code),
+                this.tr(
+                    '%1 (Error Code %2)%3',
+                    exc.message,
+                    exc.code,
+                    trace
+                )
+            );
         },
 
 
@@ -211,11 +230,18 @@ qx.Class.define("dbtoria.ui.dialog.MsgBox", {
             this.__btn_ok.setVisibility('excluded');
             this.__btn_cnl.setVisibility('visible');
             this.__btn_app.setVisibility('visible');
-            var listener = this.__btn_app.addListenerOnce("execute", exec_action);
+            var listener = this.__btn_app.addListenerOnce(
+                "execute",
+                exec_action
+            );
 
-            this.addListenerOnce('close', function() {
-                this.removeListenerById(listener);
-            }, this);
+            this.addListenerOnce(
+                'close',
+                function() {
+                    this.removeListenerById(listener);
+                },
+                this
+            );
 
             this.__open(titel, text);
         }

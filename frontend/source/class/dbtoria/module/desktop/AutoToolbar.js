@@ -17,7 +17,6 @@
 
 qx.Class.define("dbtoria.module.desktop.AutoToolbar", {
     extend : qx.ui.toolbar.ToolBar,
-//    type : "singleton",
 
     construct : function() {
         this.base(arguments);
@@ -36,13 +35,12 @@ qx.Class.define("dbtoria.module.desktop.AutoToolbar", {
     members : {
         addOverflow: function() {
             this.setOverflowMenu( new qx.ui.menu.Menu() );
-            var overflowBtn = new qx.ui.toolbar.MenuButton("More ...").set({
-                menu: this.getOverflowMenu()
-            });
+            var overflowBtn = new qx.ui.toolbar.MenuButton("More ...")
+                .set({ menu: this.getOverflowMenu()});
             this.add(overflowBtn);
             this.set({
-                overflowIndicator: overflowBtn,
-                overflowHandling: true
+                overflowIndicator : overflowBtn,
+                overflowHandling  : true
             });
 
             overflowBtn.addListener('appear',function(){

@@ -40,9 +40,27 @@ qx.Class.define("dbtoria.module.database.TableSelection", {
         var tableMenu = new qx.ui.menu.Menu();
         var viewMenu  = new qx.ui.menu.Menu();
         var pearlMenu = new qx.ui.menu.Menu();
-        var tableButton = new qx.ui.menu.Button(this.tr('Tables'), null, null, tableMenu).set({enabled: false});
-        var viewButton  = new qx.ui.menu.Button(this.tr('Views'),  null, null, viewMenu).set({enabled: false});
-        var pearlButton = new qx.ui.menu.Button(this.tr('Pearls'), null, null, pearlMenu).set({enabled: false});
+        var tableButton = new qx.ui.menu.Button(
+            this.tr('Tables'),
+            null,
+            null,
+            tableMenu
+        ).set({enabled: false});
+
+        var viewButton  = new qx.ui.menu.Button(
+            this.tr('Views'),
+            null,
+            null,
+            viewMenu
+        ).set({enabled: false});
+
+        var pearlButton = new qx.ui.menu.Button(
+            this.tr('Pearls'),
+            null,
+            null,
+            pearlMenu
+        ).set({enabled: false});
+
         this.add(tableButton);
         this.add(viewButton);
         this.add(pearlButton);
@@ -76,11 +94,21 @@ qx.Class.define("dbtoria.module.database.TableSelection", {
                         pearlMenu.add(menuButton);
                         pearlButton.setEnabled(true);
                     }
-                    menuButton.addListener("execute", function(e) {
-                        var viewMode = (item.type != 'TABLE');
-            var page = new dbtoria.module.database.TablePage(tableId, item.name, viewMode, item.readOnly);
-			page.getChildControl('button').execute();
-                    }, this);
+                    menuButton.addListener(
+                        "execute",
+                        function(e) {
+                            var viewMode = (item.type != 'TABLE');
+                            var page =
+                                new dbtoria.module.database.TablePage(
+                                    tableId,
+                                    item.name,
+                                    viewMode,
+                                    item.readOnly
+                                );
+                            page.getChildControl('button').execute();
+                        },
+                        this
+                    );
                 }
             );
         },

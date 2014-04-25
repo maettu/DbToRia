@@ -6,9 +6,6 @@
    Utf8Check: äöü
 ************************************************************************ */
 
-/* ************************************************************************
-************************************************************************ */
-
 qx.Class.define("dbtoria.ui.form.FloatTimeField", {
     extend : qx.ui.form.TextField,
     include : [ dbtoria.ui.form.MControlProperties ],
@@ -20,16 +17,22 @@ qx.Class.define("dbtoria.ui.form.FloatTimeField", {
     construct : function() {
         this.base(arguments);
         this.set({
-            toolTip: new qx.ui.tooltip.ToolTip(qx.locale.Manager.tr('Use either decimal or hh:mm::ss format.'))
+            toolTip: new qx.ui.tooltip.ToolTip(
+                qx.locale.Manager.tr(
+                    'Use either decimal or hh:mm::ss format.'
+                )
+            )
         });
     },
+
     statics : {
         __time2float: function(value) {
             var res;
             var regex = /^(\d*?):(?:(\d+)|(\d+):(\d+))$/;
-//            qx.log.Logger.debug('input='+value);
-            if (qx.lang.Type.isString(value) && (res = regex.exec(value)) ) {
-//                qx.log.Logger.debug('res='+res);
+            if (qx.lang.Type.isString(value)
+                    &&
+                (res = regex.exec(value)) ) {
+
                 var s, m, h = res[1];
                 if (res[3] != undefined) {
                     m = Number(res[3]);
@@ -39,9 +42,7 @@ qx.Class.define("dbtoria.ui.form.FloatTimeField", {
                   s = 0;
                   m = Number(res[2]);
                 }
-//                qx.log.Logger.debug('h='+h+', m='+m+', s='+s);
                 value = (h*3600+m*60+s)/3600;
-//                qx.log.Logger.debug('output='+value);
             }
             return value;
         }
@@ -65,7 +66,8 @@ qx.Class.define("dbtoria.ui.form.FloatTimeField", {
 
         setFormDataCallback: function(name, callback) {
             this.addListener('changeValue', function(e) {
-                var value = dbtoria.ui.form.FloatTimeField.__time2float(e.getData());
+                var value =
+                   dbtoria.ui.form.FloatTimeField.__time2float(e.getData());
                 callback(name, value);
             }, this);
         },
@@ -87,8 +89,6 @@ qx.Class.define("dbtoria.ui.form.FloatTimeField", {
                 var s = value % 3600;
                 var m = String(Math.floor(s/60));
                 s = String(s % 60);
-//                this.debug('m='+m+', m.length='+m.length);
-//                this.debug('m='+m+', m.length='+m.length);
                 if (m.length<2) {
                     m = '0'+m;
                 }

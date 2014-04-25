@@ -46,6 +46,8 @@ There following items have to be taken care of before publishing a first beta of
 
 =over
 
+=item :m) table refresh on edit, delete, clone
+
 =item Pearl Plugin Support
 
 Pearls are reporting plugins that ask the user for input prior to displaying
@@ -125,7 +127,7 @@ Effort: ?
 
 =head3 Example applications
 
-=over 
+=over
 
 =item Publication database
 

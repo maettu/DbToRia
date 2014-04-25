@@ -18,7 +18,6 @@
 ************************************************************************ */
 
 /* ************************************************************************
-
 #asset(dbtoria/*)
 #asset(qx/icon/${qx.icontheme}/16/actions/help-about.png)
 ************************************************************************ */
@@ -36,8 +35,8 @@
  * a search key for each column. All criteria are joined using AND.
  *
  * This may be improved in various ways (OR, brackets...) for better
- * selectabilty but its difficult to find a user friendly way to display these
- * options.
+ * selectabilty but its difficult to find a user friendly way
+ * to display these options.
  */
 qx.Class.define("dbtoria.module.database.TableFilter", {
     extend : qx.ui.window.Window,
@@ -62,14 +61,9 @@ qx.Class.define("dbtoria.module.database.TableFilter", {
         this.open();
     },
 
-
-
-
-    /*
-        *****************************************************************************
-    	MEMBERS
-        *****************************************************************************
-        */
+    /**********************************************************************
+    MEMBERS
+    **********************************************************************/
 
     members : {
         __columns : null,
@@ -112,36 +106,56 @@ qx.Class.define("dbtoria.module.database.TableFilter", {
             var column, item;
             for (i=0; i<len; i++) {
                 column = columns[i];
-                item = new qx.ui.form.ListItem(column.name, null, column.id);
+                item = new qx.ui.form.ListItem(
+                    column.name,
+                    null,
+                    column.id
+                );
                 fieldSelectBox.add(item);
             }
 
             var opSelectBox = new qx.ui.form.SelectBox();
-            opSelectBox.addListener('changeSelection',
-                                       function() {
-                                           this.__changeOp(opSelectBox,
-                                                           textField1,
-                                                           textField2,
-                                                           labelAnd);
-                                       }, this);
+            opSelectBox.addListener(
+                'changeSelection',
+                function() {
+                    this.__changeOp(opSelectBox,
+                    textField1,
+                    textField2,
+                    labelAnd);
+                },
+                this
+            );
 
             opSelectBox.setWidth(180);
             var ops = dbtoria.data.Config.getInstance().getFilterOps();
             len = ops.length;
-            var tooltip =
-              new qx.ui.tooltip.ToolTip('', "icon/16/actions/help-about.png");;
+            var tooltip = new qx.ui.tooltip.ToolTip(
+                '',
+                "icon/16/actions/help-about.png"
+            );
+
             opSelectBox.setToolTip(tooltip);
+
             for (i =0; i<len; i++) {
-                tooltip =
-                    new qx.ui.tooltip.ToolTip(ops[i].help,
-                                              "icon/16/actions/help-about.png");
-                item    = new qx.ui.form.ListItem(ops[i].op, null, ops[i].op);
+                tooltip = new qx.ui.tooltip.ToolTip(
+                    ops[i].help,
+                    "icon/16/actions/help-about.png"
+                );
+                item = new qx.ui.form.ListItem(
+                    ops[i].op,
+                    null,
+                    ops[i].op
+                );
                 item.setToolTip(tooltip);
                 item.setUserData('type', ops[i].type);
                 opSelectBox.add(item);
             }
 
-            this.getLayout().setRowAlign(this.__rowCounter, "left", "middle");
+            this.getLayout().setRowAlign(
+                this.__rowCounter,
+                "left",
+                "middle"
+            );
             this.getLayout().setColumnFlex(3, 1);
 
             this.add(checkBox, {
@@ -174,45 +188,56 @@ qx.Class.define("dbtoria.module.database.TableFilter", {
                 column : 5
             });
 
-            var applyButton = new qx.ui.form.Button(this.tr("Apply Filter"));
-            var addButton = new qx.ui.form.Button(this.tr("Add Critera"));
+            var applyButton= new qx.ui.form.Button(this.tr("Apply Filter"));
+            var addButton  = new qx.ui.form.Button(this.tr("Add Critera"));
 
             // on clicking the filter apply button the tableWindow
             // is updated with the current filter
-            applyButton.addListener("execute",
-                                      function(e) {
-                                          this.debug('Calling __filterCallback()');
-                                          this.__filterCallback(this.__getFilter());
-                                      }, this);
+            applyButton.addListener(
+                "execute",
+                function(e) {
+                    this.debug('Calling __filterCallback()');
+                    this.__filterCallback(this.__getFilter());
+                }, this
+            );
 
-            addButton.addListener("execute", function(e) {
-                this.tableFilter.addSelectionProperty();
-                this.addButton.destroy();
-                this.applyButton.destroy();
-            },
-            {
-                tableFilter   : this,
-                addButton     : addButton,
-                applyButton : applyButton
-            });
+            addButton.addListener(
+                "execute",
+                function(e) {
+                    this.tableFilter.addSelectionProperty();
+                    this.addButton.destroy();
+                    this.applyButton.destroy();
+                },
+                {
+                    tableFilter   : this,
+                    addButton     : addButton,
+                    applyButton : applyButton
+                }
+            );
 
-            this.add(applyButton, {
-                row    : this.__rowCounter,
-                column : 6
-            });
+            this.add(
+                applyButton, {
+                    row    : this.__rowCounter,
+                    column : 6
+                }
+            );
 
-            this.add(addButton, {
-                row    : this.__rowCounter,
-                column : 7
-            });
+            this.add(
+                addButton, {
+                    row    : this.__rowCounter,
+                    column : 7
+                }
+            );
 
-            this.__selection.push({
-                fieldSelectBox : fieldSelectBox,
-                opSelectBox    : opSelectBox,
-                textField1     : textField1,
-                textField2     : textField2,
-                checkBox       : checkBox
-            });
+            this.__selection.push(
+                {
+                    fieldSelectBox : fieldSelectBox,
+                    opSelectBox    : opSelectBox,
+                    textField1     : textField1,
+                    textField2     : textField2,
+                    checkBox       : checkBox
+                }
+            );
 
             this.__rowCounter++;
         },
@@ -220,7 +245,6 @@ qx.Class.define("dbtoria.module.database.TableFilter", {
 
         /**
          * Callback for changeSelection on opSelectBox
-         *
          */
         __changeOp : function(selectBox, textField1, textField2, labelAnd) {
             var selection = selectBox.getSelection()[0];
@@ -243,7 +267,9 @@ qx.Class.define("dbtoria.module.database.TableFilter", {
                 textField2.exclude();
                 break;
             }
-            selectBox.getToolTip().setLabel(selection.getToolTip().getLabel());
+            selectBox.getToolTip().setLabel(
+                selection.getToolTip().getLabel()
+            );
         },
 
         /**
@@ -261,8 +287,16 @@ qx.Class.define("dbtoria.module.database.TableFilter", {
 
                 if (selection.checkBox.getValue()) {
                     var tmp = {
-                        field:  selection.fieldSelectBox.getSelection()[0].getModel(),
-                        op:     selection.opSelectBox.getSelection()[0].getModel(),
+                        field:  selection
+                                    .fieldSelectBox
+                                    .getSelection()[0]
+                                    .getModel(),
+
+                        op:     selection
+                                    .opSelectBox
+                                    .getSelection()[0]
+                                    .getModel(),
+
                         value1: selection.textField1.getValue(),
                         value2: selection.textField2.getValue()
                     };

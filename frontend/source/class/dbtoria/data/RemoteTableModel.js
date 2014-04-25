@@ -70,9 +70,7 @@ qx.Class.define('dbtoria.data.RemoteTableModel', {
             var that = this;
             var filter = this.getFilter();
             this.debug('table=', this.__tableId);
-//            this.debug('filter=', filter);
             this.__rpc.callAsync(function(ret,exc) {
-//                that.debug('getRowCount() returned', ret);
                 if (exc) {
                     dbtoria.ui.dialog.MsgBox.getInstance().exc(exc);
                     ret = 0;
@@ -80,6 +78,7 @@ qx.Class.define('dbtoria.data.RemoteTableModel', {
                 that._onRowCountLoaded(ret);
             }, 'getRowCount', this.__tableId, filter);
         },
+
         __getBestFilterOp: function(){
             var gotILIKE = false;
             var ops = dbtoria.data.Config.getInstance().getFilterOps();
@@ -90,6 +89,7 @@ qx.Class.define('dbtoria.data.RemoteTableModel', {
             });
             return gotILIKE ? 'ILIKE' : 'LIKE';
         },
+
         _applySearchString: function (newString,oldString){
             if (oldString == newString){
                 return;
@@ -112,7 +112,6 @@ qx.Class.define('dbtoria.data.RemoteTableModel', {
          * @param oldValue {Integer} Old TagId
          */
         _applyFilter : function(newValue, oldValue) {
-//            this.debug('_applyFilter(): calling reloadData()');
             this.reloadData();
         },
 
@@ -124,7 +123,6 @@ qx.Class.define('dbtoria.data.RemoteTableModel', {
          * @param lastRow {Integer} last row to load
          */
         _loadRowData : function(firstRow, lastRow) {
-//            this.debug('_loadRowData(): first=', firstRow, ', last=', lastRow);
 
             var rpcArgs = {
                 filter   : this.getFilter()

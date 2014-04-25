@@ -36,11 +36,17 @@ qx.Class.define("dbtoria.module.desktop.Window", {
     extend : qx.ui.window.Window,
     construct : function() {
         this.base(arguments);
-   this.getApplicationRoot().add(this);
+        this.getApplicationRoot().add(this);
 
         var taskbar = dbtoria.module.desktop.Taskbar.getInstance();
-        var taskbarButton  = new qx.ui.toolbar.Button(null, "icon/16/mimetypes/text-plain.png");
-        var taskbarButtonO = new qx.ui.menu.Button(null, "icon/16/mimetypes/text-plain.png");
+        var taskbarButton  = new qx.ui.toolbar.Button(
+            null,
+            "icon/16/mimetypes/text-plain.png"
+        );
+        var taskbarButtonO = new qx.ui.menu.Button(
+            null,
+            "icon/16/mimetypes/text-plain.png"
+        );
         taskbarButton.exclude();
         taskbarButtonO.exclude();
         taskbar.dock(taskbarButton, taskbarButtonO);
@@ -49,24 +55,40 @@ qx.Class.define("dbtoria.module.desktop.Window", {
             taskbarButton.exclude();
             taskbarButtonO.exclude();
         };
-        this.addListener("minimize", function(e) {
-            taskbarButton.addListener("execute", qx.lang.Function.bind(handler, this));
-            taskbarButtonO.addListener("execute", qx.lang.Function.bind(handler, this));
-            taskbarButtonO.addListener("execute", handler, this );
-            taskbarButton.setLabel(this.getCaption());
-            taskbarButton.show();
-            taskbarButtonO.setLabel(this.getCaption());
-//            taskbarButtonO.show();
-        },
-        this);
-
+        this.addListener(
+            "minimize",
+            function(e) {
+                taskbarButton.addListener(
+                    "execute",
+                    qx.lang.Function.bind(
+                        handler, this
+                    )
+                );
+                taskbarButtonO.addListener(
+                    "execute",
+                    qx.lang.Function.bind(
+                        handler,
+                        this
+                    )
+                );
+                taskbarButtonO.addListener(
+                    "execute",
+                    handler,
+                    this
+                );
+                taskbarButton.setLabel(this.getCaption());
+                taskbarButton.show();
+                taskbarButtonO.setLabel(this.getCaption());
+            },
+            this
+        );
     },
 
     properties: {
         loading: {
-            init : false,
-            check: 'Boolean',
-            apply: '_applyLoading'
+            init  : false,
+            check : 'Boolean',
+            apply : '_applyLoading'
         }
     },
 
@@ -77,9 +99,9 @@ qx.Class.define("dbtoria.module.desktop.Window", {
             switch(id) {
                 case "stack":
                     control = new qx.ui.container.Composite().set({
-                        layout: new qx.ui.layout.Grow(),
-                        allowGrowX: true,
-                        allowGrowY: true
+                        layout     : new qx.ui.layout.Grow(),
+                        allowGrowX : true,
+                        allowGrowY : true
                     });
                     this._add(control, {flex: 1});
                     break;
@@ -88,18 +110,21 @@ qx.Class.define("dbtoria.module.desktop.Window", {
                     this.getChildControl('stack').add(control);
                     break;
                 case "loader":
-                    control = new qx.ui.basic.Atom(null,"dbtoria/loader.gif").set({
-                        visibility: 'hidden',
-                        show: 'icon',
-                        backgroundColor: '#fcfcfc',
-                        opacity: 0.7,
-                        allowGrowX: true,
-                        allowGrowY: true,
-                        alignX: 'center',
-                        alignY: 'middle',
-                        center: true
-                    });
-                    this.getChildControl('pane'); // make sure pane is created first!
+                    control = new qx.ui.basic.Atom(
+                        null,"dbtoria/loader.gif").set({
+                            visibility: 'hidden',
+                            show: 'icon',
+                            backgroundColor: '#fcfcfc',
+                            opacity: 0.7,
+                            allowGrowX: true,
+                            allowGrowY: true,
+                            alignX: 'center',
+                            alignY: 'middle',
+                            center: true
+                        }
+                    );
+                    // make sure pane is created first!
+                    this.getChildControl('pane');
                     this.getChildControl('stack').add(control);
                     break;
             }
@@ -115,7 +140,6 @@ qx.Class.define("dbtoria.module.desktop.Window", {
                     this.__runningTimer = null;
                     this.getChildControl('loader').show();
                 },this,200);
-//              this.__runningTimer.start();
             }
             else {
                 if (this.__runningTimer){
@@ -126,5 +150,4 @@ qx.Class.define("dbtoria.module.desktop.Window", {
             }
         }
     }
-
 });

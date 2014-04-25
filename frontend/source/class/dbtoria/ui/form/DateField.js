@@ -6,9 +6,6 @@
    Utf8Check: äöü
 ************************************************************************ */
 
-/* ************************************************************************
-************************************************************************ */
-
 qx.Class.define("dbtoria.ui.form.DateField", {
     extend : qx.ui.form.DateField,
     include : [ dbtoria.ui.form.MControlProperties, dbtoria.ui.form.MControlReadOnly ],
@@ -45,11 +42,15 @@ qx.Class.define("dbtoria.ui.form.DateField", {
         },
 
         setFormDataCallback: function(name, callback) {
-            this.addListener('changeValue', function(e) {
-                var date = e.getData();
-                var value = this.__date2string(date);
-                callback(name, value);
-            }, this);
+            this.addListener(
+                'changeValue',
+                function(e) {
+                    var date = e.getData();
+                    var value = this.__date2string(date);
+                    callback(name, value);
+                },
+                this
+            );
         },
 
         validator: function(value,control) {
@@ -81,52 +82,5 @@ qx.Class.define("dbtoria.ui.form.DateField", {
             }
             return y+'-'+m+'-'+d;
         }
-
-//         /**
-//          * TODOC
-//          *
-//          * @param e {Event} TODOC
-//          * @return {void}
-//          */
-//         _fireValue : function(e) {
-//             var date = this.getValue();
-//             var epoch = null;
-
-//             if (date && date.getTime) {
-//                 epoch = date.getTime() / 1000.0;
-//             }
-
-//             this.fireDataEvent('changeValue', epoch);
-// //            this._skipApplyValue++;
-// //            this.setValue(operator + ' ' + date);
-//             this.setValue(date);
-//         },
-
-
-//         /**
-//          * provide string representation of the selection "operator text field"
-//          *
-//          * @param value {var} TODOC
-//          * @param old {var} TODOC
-//          * @return {void}
-//          */
-//         _applyValue : function(value, old) {
-//             // if (this._skipApplyValue > 0) {
-//             //     this._skipApplyValue--;
-//             //     return;
-//             // }
-
-//             var epoch = value;
-
-//             if (epoch) {
-//                 this.setValue(new Date(epoch * 1000.0));
-//             } else {
-//                 date.setValue(null);
-//             }
-//         }
-
-
-
     }
-
 });

@@ -58,68 +58,61 @@ qx.Class.define("dbtoria.module.database.Table", {
 
         this.base(arguments);
         this.set({
-//            width          : 800,
-//            height         : 500,
-//            loading        : true,
-            layout         : new qx.ui.layout.VBox().set({ separator: "separator-vertical"})
+            layout : new qx.ui.layout.VBox().set({
+                         separator : "separator-vertical"
+                     })
         });
 
-	this.__refDelay = dbtoria.data.Config.getInstance().getRefDelay();
-	var filterOps   = dbtoria.data.Config.getInstance().getFilterOps();
-//	this.debug('filterOps='+filterOps);
-	
-        this.__rpc = dbtoria.data.Rpc.getInstance();
-        this.__buildUi(tableId, viewMode, readOnly);
-//        if (viewMode) {
-//            this.setCaption(this.tr('View: %1', this.__tableName));
-//            this.setLabel(this.tr('View: %1', this.__tableName));
-//        }
-//        else {
-//            this.setCaption(this.tr('Table: %1', this.__tableName));
-//            this.setLabel(this.tr('Table: %1', this.__tableName));
-//        }
-        this.__recordEdit = new dbtoria.module.database.RecordEdit(tableId, tableName, readOnly);
-        this.__recordEdit.addListener('navigation', this.__navigation, this);
-        this.__recordEdit.addListener('refresh',    this.__refresh, this);
-//	var root = this.getApplicationRoot();
-//	this.debug('root='+root);
-//	root.add(this.__recordEdit);
-//        this.addListener('close', function() {
-//            this.__recordEdit.cancel();
-//        }, this);
-//        this.open();
+    this.__refDelay = dbtoria.data.Config.getInstance().getRefDelay();
+    var filterOps   = dbtoria.data.Config.getInstance().getFilterOps();
+
+    this.__rpc = dbtoria.data.Rpc.getInstance();
+    this.__buildUi(tableId, viewMode, readOnly);
+    this.__recordEdit = new dbtoria.module.database.RecordEdit(
+                            tableId, tableName, readOnly
+                        );
+        this.__recordEdit.addListener(
+            'navigation',
+            this.__navigation,
+            this
+        );
+        this.__recordEdit.addListener(
+            'refresh',
+            this.__refresh,
+            this
+        );
     },
 
     members : {
-        __table:      null,
-        __tbEdit:     null,
-        __tbDelete:   null,
-        __tbClone:    null,
-        __tbNew:      null,
-        __currentId:  null,
-        __tableName:  null,
-        __tableId:    null,
-        __columns:    null,
-        __recordEdit: null,
-        __rpc:        null,
-        __dataChangedHandler:    null,
-        __viewMode: null,
-        __readOnly: null,
-        __filter: null,
-	__refDelay: null,
-	__refTimer: null,
+        __table              : null,
+        __tbEdit             : null,
+        __tbDelete           : null,
+        __tbClone            : null,
+        __tbNew              : null,
+        __currentId          : null,
+        __tableName          : null,
+        __tableId            : null,
+        __columns            : null,
+        __recordEdit         : null,
+        __rpc                : null,
+        __dataChangedHandler : null,
+        __viewMode           : null,
+        __readOnly           : null,
+        __filter             : null,
+        __refDelay           : null,
+        __refTimer           : null,
 
-	getTable: function() {
-	    return this.__table;
-	},
+        getTable : function() {
+            return this.__table;
+        },
 
         __cellChange: function(e) {
-	    this.__refTimer.stop();
+            this.__refTimer.stop();
             var data = e.getData();
             var row   = data.row;
             var col   = data.col;
             var mouse = data.mouse; // mouse event
-
+            console.log ("hello");
             // close and remove tooltip if not over a table cell
             if (row == null || row == -1) {
                 this.__table.hideTooltip();
@@ -131,16 +124,16 @@ qx.Class.define("dbtoria.module.database.Table", {
             var colId    = tm.getColumnId(col);
             var tableId  = this.__tableId;
             var rowInfo  = tm.getRowData(row);
+
             var recordId;
             if (rowInfo) {
                 recordId = rowInfo['ROWINFO'][0];
             }
 
-            // check if we are in a column referencing another table
-	    var references = this.__table.getTableModel().getColumnReferences();
-//	    this.debug('references=');
-//	    qx.dev.Debug.debugObject(references);
-//	    this.debug('colId='+colId+', col=',+col);
+                // check if we are in a column referencing another table
+            var references =
+                this.__table.getTableModel().getColumnReferences();
+
             if (!references[col]) {
                 this.__table.hideTooltip();
                 return;
@@ -151,35 +144,38 @@ qx.Class.define("dbtoria.module.database.Table", {
                 recordId: recordId,
                 columnId: colId
             };
-//            qx.dev.Debug.debugObject(params);
-//            this.__tooltip.placeToMouse(mouse);
 
-            this.__refTimer.addListener('interval', function(e) {
-//                this.debug('timer fired');
-                this.__refTimer.stop();
+            this.__refTimer.addListener(
+                'interval',
+                function(e) {
+                    this.__refTimer.stop();
 
-                var rpc = dbtoria.data.Rpc.getInstance();
-            // Get appropriate row from referenced table
-                rpc.callAsyncSmart(qx.lang.Function.bind(this.__referenceHandler, 
-							 this),
-				   'getReferencedRecord', params);
-            }, this);
-//            this.debug('starting timer');
-	    this.__refTimer.start();
+                    var rpc = dbtoria.data.Rpc.getInstance();
+                    // Get appropriate row from referenced table
+                    rpc.callAsyncSmart(
+                        qx.lang.Function.bind(this.__referenceHandler, this),
+                        'getReferencedRecord',
+                        params
+                    );
+                },
+                this
+            );
+
+            this.__refTimer.start();
         },
 
-        __referenceHandler: function(data) {
+        __referenceHandler : function(data) {
             var key, val;
             var label = '<table>';
             for (key in data) {
                 val = data[key];
-                label += '<tr><td>'+key+':</td><td>'+val+'</td></tr>';
+                label += '<tr><td>' + key + ':</td><td>' + val + '</td></tr>';
             }
             label += '</table>';
             this.__table.updateTooltip(label);
         },
 
-        close: function() {
+        close : function() {
             if (this.__viewMode || this.__readOnly ||
                 !this.__recordEdit.isVisible()) {
                 this.__recordEdit.close();
@@ -187,31 +183,42 @@ qx.Class.define("dbtoria.module.database.Table", {
                 return;
             }
             var mbox = dbtoria.ui.dialog.MsgBox.getInstance();
-            mbox.info(this.tr('Unsaved data.'),
-                      this.tr('You must first close the record edit window.'));
+            mbox.info(
+                this.tr('Unsaved data.'),
+                this.tr('You must first close the record edit window.')
+            );
         },
 
         __refresh : function(e) {
             var tm = this.__table.getTableModel();
             if (this.__dataChangedHandler) {
-                tm.removeListener('dataChanged', this.__dataChangedHandler, this);
+                tm.removeListener(
+                    'dataChanged',
+                    this.__dataChangedHandler,
+                    this
+                );
                 this.__dataChangedHandler = null;
             }
 
             // check if we still have a correct selection
-            // FIX ME: it would be nicer to actually figure out which row to select.
+            // FIX ME: it would be nicer to actually figure out
+            // which row to select.
+
             var sm        = this.__table.getSelectionModel();
             var selection = sm.getSelectedRanges()[0];
-            var row = null;
-            var that=this;
+            var row       = null;
+            var that      = this;
             if (selection) {
                 row = selection.minIndex;
                 this.__dataChangedHandler = function(e) {
                     var id, rowData = tm.getRowData(row);
                     if (rowData) { // we found the row
-                        tm.removeListener('dataChanged', this.__dataChangedHandler, this);
+                        tm.removeListener(
+                            'dataChanged',
+                            this.__dataChangedHandler,
+                            this
+                        );
                         this.__dataChangedHandler = null;
-//                        that.setLoading(false);
                         id = rowData['ROWINFO'][0];
                         if (id != this.__currentId) {
                             sm.resetSelection();
@@ -221,14 +228,16 @@ qx.Class.define("dbtoria.module.database.Table", {
             }
             else {
                 this.__dataChangedHandler = function(e) {
-                    tm.removeListener('dataChanged', this.__dataChangedHandler, this);
+                    tm.removeListener(
+                        'dataChanged',
+                        this.__dataChangedHandler,
+                        this
+                    );
                     this.__dataChangedHandler = null;
-//                    that.setLoading(false);
                 };
             }
 
             tm.addListener('dataChanged', this.__dataChangedHandler, this);
-//            this.setLoading(true);
             tm.reloadData();
         },
 
@@ -247,31 +256,33 @@ qx.Class.define("dbtoria.module.database.Table", {
             var oldRow = row;
             // switch record
             var maxRow = tm.getRowCount();
-            this.debug('__navigation(): target='+target+', row='+row+', maxRow='+maxRow);
+            this.debug(
+                '__navigation(): target=' + target + ', row=' +
+                row + ', maxRow=' + maxRow
+            );
             switch (target) {
-            case 'first':
-                row = 0;
-                break;
-            case 'back':
-                if (row>0) {
-                    row--;
-                }
-                break;
-            case 'next':
-                if (row<maxRow-1) {
-                    row++;
-                }
-                break;
-            case 'last':
-                row = maxRow-1;
-                break;
-            case 'new':
-                this.__newRecord();
-                return;
-                break;
+                case 'first':
+                    row = 0;
+                    break;
+                case 'back':
+                    if (row>0) {
+                        row--;
+                    }
+                    break;
+                case 'next':
+                    if (row<maxRow-1) {
+                        row++;
+                    }
+                    break;
+                case 'last':
+                    row = maxRow-1;
+                    break;
+                case 'new':
+                    this.__newRecord();
+                    return;
+                    break;
             }
 
-            // switch
             if (row==oldRow) { // make sure there is a changeSelection event
                 sm.resetSelection();
             }
@@ -285,52 +296,110 @@ qx.Class.define("dbtoria.module.database.Table", {
 
 
         /**
-         * Display a table overview with data
-         *
-         * @return {void}
-         */
-      __buildUi : function(tableId, viewMode, readOnly) {
+        * Display a table overview with data
+        *
+        * @return {void}
+        */
+        __buildUi : function(tableId, viewMode, readOnly) {
             var toolbar = new qx.ui.toolbar.ToolBar();
-            var newButton = this.__tbNew = new qx.ui.toolbar.Button(this.tr("New"), "icon/16/actions/contact-new.png");
-            var editButton = this.__tbEdit = new qx.ui.toolbar.Button(this.tr("Edit"), "icon/16/apps/utilities-text-editor.png").set({enabled: false});
-            var cloneButton = this.__tbClone = new qx.ui.toolbar.Button(this.tr("Clone"), "icon/16/actions/edit-copy.png").set({enabled: false});
-            var deleteButton = this.__tbDelete = new qx.ui.toolbar.Button(this.tr("Delete"), "icon/16/actions/edit-delete.png").set({enabled: false});
-            var refreshButton = new qx.ui.toolbar.Button(this.tr("Refresh"), "icon/16/actions/view-refresh.png");
-            var exportButton = new qx.ui.toolbar.Button(this.tr("Export"), "icon/16/actions/document-save-as.png").set({enabled: false});
-            var printButton = new qx.ui.toolbar.Button(this.tr("Print"), "icon/16/actions/document-print.png").set({enabled: false});
-            var filterButton = new qx.ui.toolbar.CheckBox(this.tr("Filter"), "icon/16/actions/system-search.png");
+            var newButton = this.__tbNew = new qx.ui.toolbar.Button(
+                this.tr("New"),
+                "icon/16/actions/contact-new.png"
+            );
+
+            var editButton = this.__tbEdit = new qx.ui.toolbar.Button(
+                this.tr("Edit"),
+                "icon/16/apps/utilities-text-editor.png"
+            ).set({enabled: false});
+
+            var cloneButton = this.__tbClone = new qx.ui.toolbar.Button(
+                this.tr("Clone"),
+                "icon/16/actions/edit-copy.png"
+            ).set({enabled: false});
+
+            var deleteButton = this.__tbDelete = new qx.ui.toolbar.Button(
+                this.tr("Delete"),
+                "icon/16/actions/edit-delete.png"
+            ).set({enabled: false});
+
+            var refreshButton = new qx.ui.toolbar.Button(
+                this.tr("Refresh"),
+                "icon/16/actions/view-refresh.png"
+            );
+
+            var exportButton = new qx.ui.toolbar.Button(
+                this.tr("Export"),
+                "icon/16/actions/document-save-as.png"
+            ).set({enabled: false});
+
+            var printButton = new qx.ui.toolbar.Button(
+                this.tr("Print"),
+                "icon/16/actions/document-print.png"
+            ).set({enabled: false});
+
+            var filterButton = new qx.ui.toolbar.CheckBox(
+                this.tr("Filter"),
+                "icon/16/actions/system-search.png"
+            );
 
             if (readOnly) {
                 editButton.setLabel(this.tr("Show"));
             }
             if (!viewMode && !readOnly) {
-                newButton.addListener('execute', this.__newRecord, this);
+                newButton.addListener(
+                    'execute',
+                    this.__newRecord,
+                    this
+                );
                 toolbar.add(newButton);
             }
-            editButton.addListener('execute', this.__editRecord, this);
+            editButton.addListener(
+                'execute',
+                this.__editRecord,
+                this
+            );
             toolbar.add(editButton);
 
             if (!viewMode && !readOnly) {
-                cloneButton.addListener('execute', this.__cloneRecord, this);
+                cloneButton.addListener (
+                    'execute',
+                    this.__cloneRecord,
+                    this
+                );
                 toolbar.add(cloneButton);
 
-                deleteButton.addListener('execute', this.__deleteRecord, this);
+                deleteButton.addListener(
+                    'execute',
+                    this.__deleteRecord,
+                    this
+                );
                 toolbar.add(deleteButton);
             }
 
             toolbar.addSpacer();
 
-            refreshButton.addListener('execute', this.__refresh, this);
+            refreshButton.addListener(
+                'execute',
+                this.__refresh,
+                this
+            );
             toolbar.add(refreshButton);
 
             toolbar.add(exportButton);
             toolbar.add(printButton);
 
-            filterButton.addListener('execute', qx.lang.Function.bind(this.__filterTable, this), this);
+            filterButton.addListener(
+                'execute',
+                qx.lang.Function.bind(this.__filterTable, this),
+                this
+            );
+
             toolbar.add(filterButton);
 
             this.add(toolbar);
+
             var that = this;
+
             this.__rpc.callAsyncSmart(function(ret) {
                 var columns = ret.columns;
                 that.__columns = columns;
@@ -339,59 +408,96 @@ qx.Class.define("dbtoria.module.database.Table", {
                 var columnReferences = [];
                 var columnLabels = {};
                 var i, nCols = columns.length;
-                for (i=0; i<nCols; i++) {
+                for (i = 0; i < nCols; i++) {
                     columnIds.push(columns[i].id);
                     columnLabels[columns[i].id] = columns[i].name;
-		    columnReferences.push(columns[i].fk);
-//		    that.debug('columns: i='+i);
-//		    qx.dev.Debug.debugObject(columns[i]);
+                    columnReferences.push(columns[i].fk);
                 }
-		
-                var model = 
-		    new dbtoria.data.RemoteTableModel(tableId, columnIds, 
-						      columnLabels,
-						      columnReferences);
-                that.__table = new dbtoria.ui.table.Table(model, that.__tableId);
-		if (that.__refDelay > 0) { 
-//		    that.debug('Creating timer');
-		    that.__refTimer = new qx.event.Timer(that.__refDelay);
-                    that.__table.addListener('cellChange', that.__cellChange, that);
-		}
+
+                var model =
+                    new dbtoria.data.RemoteTableModel(
+                        tableId, columnIds,
+                        columnLabels,
+                        columnReferences
+                );
+                that.__table = new dbtoria.ui.table.Table(
+                    model,
+                    that.__tableId
+                );
+                if (that.__refDelay > 0) {
+                    that.__refTimer = new qx.event.Timer(that.__refDelay);
+                    that.__table.addListener(
+                        'cellChange',
+                        that.__cellChange,
+                        that
+                    );
+                }
 
                 var tcm      = that.__table.getTableColumnModel();
                 tcm.setColumnVisible(0, false);
 
-                for (i=0; i<nCols; i++){
+                for (i = 0; i < nCols; i++){
                     if (columns[i].type == 'boolean') {
-                        var cellrenderer = new qx.ui.table.cellrenderer.Boolean();
+                        var cellrenderer
+                            = new qx.ui.table.cellrenderer.Boolean();
                         tcm.setDataCellRenderer(i, cellrenderer);
                     }
                 }
 
                 if (!viewMode) {
-                    that.__table.getSelectionModel().addListener('changeSelection',that.__switchRecord, that);
-                    that.__table.addListener("cellDblclick", that.__editRecord, that);
+                    that.__table.getSelectionModel().addListener(
+                        'changeSelection',
+                        that.__switchRecord,
+                        that
+                    );
+                    that.__table.addListener(
+                        "cellDblclick",
+                        that.__editRecord,
+                        that
+                    );
                 }
+
                 for (i=0; i<nCols; i++){
-                    that.__table.setContextMenuHandler(i, that.__contextMenuHandler, that);
+                    that.__table.setContextMenuHandler(
+                        i,
+                        that.__contextMenuHandler,
+                        that
+                    );
                 }
                 that.add(that.__table, { flex : 1 });
-//                that.setLoading(false);
-            },'getListView',tableId);
+            },
+            'getListView',tableId);
         },
 
-        __contextMenuHandler: function(col, row, table, dataModel, contextMenu) {
-            var editEntry   = new qx.ui.menu.Button(this.tr("Edit"));
-            editEntry.addListener("execute", this.__editRecord, this);
+        __contextMenuHandler : function(
+                    col, row, table, dataModel, contextMenu
+            ) {
+
+            var editEntry = new qx.ui.menu.Button(this.tr("Edit"));
+            editEntry.addListener(
+                "execute",
+                this.__editRecord,
+                this
+            );
             if (this.__readOnly) {
                 editEntry.setLabel(this.tr('Show'));
             }
             contextMenu.add(editEntry);
             if (!this.__readOnly) {
                 var deleteEntry = new qx.ui.menu.Button(this.tr("Delete"));
-                deleteEntry.addListener("execute", this.__deleteRecord, this);
+                deleteEntry.addListener(
+                    "execute",
+                    this.__deleteRecord,
+                    this
+                );
+
                 var cloneEntry = new qx.ui.menu.Button(this.tr("Clone"));
-                cloneEntry.addListener("execute", this.__cloneRecord, this);
+                cloneEntry.addListener(
+                    "execute",
+                    this.__cloneRecord,
+                    this
+                );
+
                 contextMenu.add(deleteEntry);
                 contextMenu.add(cloneEntry);
             }
@@ -401,8 +507,15 @@ qx.Class.define("dbtoria.module.database.Table", {
 
         __deleteRecord : function(e) {
             this.debug('__deleteRecord(): id='+this.__currentId);
-            this.__rpc.callAsyncSmart(qx.lang.Function.bind(this.__deleteRecordHandler, this),
-                                      'deleteTableData', this.__tableId, this.__currentId);
+            this.__rpc.callAsyncSmart(
+                qx.lang.Function.bind(
+                    this.__deleteRecordHandler,
+                    this
+                ),
+                'deleteTableData',
+                this.__tableId,
+                this.__currentId
+            );
         },
 
         __deleteRecordHandler : function(ret) {
@@ -418,64 +531,74 @@ qx.Class.define("dbtoria.module.database.Table", {
         __cloneRecordHandler: function(e) {
             var ret = e.getData();
             switch (ret) {
-            case 'failed':
-            case 'invalid':
-                break;
-            case 'succeeded':
-                this.__refresh();
-            case null:
-                this.__recordEdit.cloneRecord(this.__currentId);
-                break;
+                case 'failed':
+                case 'invalid':
+                    break;
+                case 'succeeded':
+                    this.__refresh();
+                case null:
+                    this.__recordEdit.cloneRecord(this.__currentId);
+                    break;
             }
         },
 
         __cloneRecord : function(e) {
-            this.__recordEdit.addListenerOnce('saveRecord', this.__cloneRecordHandler, this);
+            this.__recordEdit.addListenerOnce(
+                'saveRecord',
+                this.__cloneRecordHandler,
+                this
+            );
             this.__recordEdit.saveRecord();
         },
 
         __editRecordHandler: function(e) {
             var ret = e.getData();
             switch (ret) {
-            case 'failed':
-            case 'invalid':
-                break;
-            case 'succeeded':
-                this.__refresh();
-            case null:
-                this.__recordEdit.editRecord(this.__currentId);
-                break;
+                case 'failed':
+                case 'invalid':
+                    break;
+                case 'succeeded':
+                    this.__refresh();
+                case null:
+                    this.__recordEdit.editRecord(this.__currentId);
+                    break;
             }
         },
 
         __editRecord : function(e) {
             this.debug('__editRecord called');
-            this.__recordEdit.addListenerOnce('saveRecord',
-                                              qx.lang.Function.bind(this.__editRecordHandler, this),
-                                              this);
-	    this.__recordEdit.open();
+            this.__recordEdit.addListenerOnce(
+                'saveRecord',
+                qx.lang.Function.bind(this.__editRecordHandler, this),
+                this
+            );
+            this.__recordEdit.open();
             this.__recordEdit.saveRecord();
         },
 
         __newRecordHandler: function(e) {
             var ret = e.getData();
-            this.debug('__newRecordHandler(): ret='+ret);
+            this.debug('__newRecordHandler(): ret=' + ret);
             switch (ret) {
-            case 'failed':
-            case 'invalid':
-                break;
-            case 'succeeded':
-                this.__refresh();
-            case null:
-                var sm = this.__table.getSelectionModel();
-                sm.resetSelection();
-                this.__recordEdit.newRecord();
-                break;
+                case 'failed':
+                case 'invalid':
+                    break;
+                case 'succeeded':
+                    this.__refresh();
+                case null:
+                    var sm = this.__table.getSelectionModel();
+                    sm.resetSelection();
+                    this.__recordEdit.newRecord();
+                    break;
             }
         },
 
         __newRecord : function(e) {
-            this.__recordEdit.addListenerOnce('saveRecord', this.__newRecordHandler, this);
+            this.__recordEdit.addListenerOnce(
+                'saveRecord',
+                this.__newRecordHandler,
+                this
+            );
             this.__recordEdit.saveRecord();
         },
 
@@ -485,19 +608,21 @@ qx.Class.define("dbtoria.module.database.Table", {
                 this.__filter.open();
             }
             else {
-                this.__filter =
-                    new dbtoria.module.database.TableFilter(this.tr("Filter: %1",
-                                                                    this.__tableName),
-                                                            this.__columns,
-                                                            function(filter) {
-                                                                that.__table.getTableModel().setFilter(filter);
-                                                            }
-                                                           );
+                this.__filter = new dbtoria.module.database.TableFilter(
+                    this.tr(
+                        "Filter: %1",
+                        this.__tableName
+                    ),
+                    this.__columns,
+                    function(filter) {
+                        that.__table.getTableModel().setFilter(filter);
+                    }
+                );
             }
         },
 
         __switchRecord : function(e) {
-	    this.debug('__switchRecord()');
+        this.debug('__switchRecord()');
             var table  = this.__table;
             var model  = table.getTableModel();
             var selMod = table.getSelectionModel();
@@ -513,7 +638,7 @@ qx.Class.define("dbtoria.module.database.Table", {
                 row = model.getRowData(ind);
             });
             if (row) {
-		qx.dev.Debug.debugObject(row, 'row=');
+        qx.dev.Debug.debugObject(row, 'row=');
                 this.__currentId = row.ROWINFO[0];
                 this.__tbClone.setEnabled(row.ROWINFO[1]);
                 this.__tbEdit.setEnabled(row.ROWINFO[1]);
@@ -529,6 +654,5 @@ qx.Class.define("dbtoria.module.database.Table", {
                 this.__editRecord(this.__currentId);
             }
         }
-
     }
 });

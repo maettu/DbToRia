@@ -6,12 +6,12 @@
    Utf8Check: äöü
 ************************************************************************ */
 
-/* ************************************************************************
-************************************************************************ */
-
 qx.Class.define("dbtoria.ui.form.CheckBox", {
     extend : qx.ui.form.CheckBox,
-    include : [ dbtoria.ui.form.MControlProperties, dbtoria.ui.form.MControlReadOnly ],
+    include : [
+        dbtoria.ui.form.MControlProperties,
+        dbtoria.ui.form.MControlReadOnly
+    ],
 
     /**
      * Create a customized CheckBox.

@@ -23,10 +23,10 @@ qx.Class.define("dbtoria.module.desktop.Toolbar", {
         this.base(arguments);
 
 
-        var partAction = new qx.ui.toolbar.Part();
-        var partTables = new qx.ui.toolbar.Part();
+        var partAction    = new qx.ui.toolbar.Part();
+        var partTables    = new qx.ui.toolbar.Part();
         this.__partTables = partTables;
-        var partLast   = new qx.ui.toolbar.Part();
+        var partLast      = new qx.ui.toolbar.Part();
 
         this.add(partAction);
         this.add(new qx.ui.toolbar.Separator());
@@ -36,16 +36,27 @@ qx.Class.define("dbtoria.module.desktop.Toolbar", {
         this.add(new qx.ui.toolbar.Separator());
         this.add(partLast);
         var menu    = dbtoria.module.database.TableSelection.getInstance();
-        var menuBtn = new qx.ui.toolbar.MenuButton(this.tr("Menu"),"icon/16/places/folder.png", menu);
+        var menuBtn = new qx.ui.toolbar.MenuButton(
+            this.tr("Menu"),
+            "icon/16/places/folder.png",
+            menu
+        );
         menuBtn.set({ show: 'icon'});
         partAction.add(menuBtn);
 
         this.__rpc = dbtoria.data.Rpc.getInstance();
-        this.__rpc.callAsyncSmart(qx.lang.Function.bind(this.__getTablesHandler, this),
-                                  'getToolbarTables');
+        this.__rpc.callAsyncSmart(
+            qx.lang.Function.bind(
+                this.__getTablesHandler,
+                this
+            ),
+            'getToolbarTables'
+        );
 
-        var logoutBtn = new qx.ui.toolbar.Button(this.tr("Logout"),
-                                                 "icon/16/actions/application-exit.png");
+        var logoutBtn = new qx.ui.toolbar.Button(
+            this.tr("Logout"),
+            "icon/16/actions/application-exit.png"
+        );
         this.__logoutBtn = logoutBtn;
         logoutBtn.set({
             show: 'icon'
@@ -73,12 +84,19 @@ qx.Class.define("dbtoria.module.desktop.Toolbar", {
             tables.map(
                 function(table) {
                     var handler = function() {
-                        var page = new dbtoria.module.database.TablePage(table.tableId, table.name, null, table.readOnly);
-            page.getChildControl('button').execute();
+                        var page = new dbtoria.module.database.TablePage(
+                            table.tableId,
+                            table.name,
+                            null,
+                            table.readOnly
+                        );
+                        page.getChildControl('button').execute();
                     };
                     table.label = table.name;
                     if (table.readOnly) {
-                        table.label += '*';
+                        table.label += '* (readonly patched away :m)';
+                        // XXX dev patch: remove!
+                        table.readOnly=false;
                     }
                     var btn = new qx.ui.toolbar.Button(table.label);
                     lastButton = btn;
@@ -92,12 +110,17 @@ qx.Class.define("dbtoria.module.desktop.Toolbar", {
                     menu.add(btnO);
                 }
             );
-            // force the overflow to be recalculate when all the buttons are there
-            // naive me would expect this not to be neccessary
-            lastButton.addListenerOnce('appear',function(){
-                var pane = this.getLayoutParent();
-                this.fireDataEvent('resize', pane.getBounds());
-            },this);
+            // force the overflow to be recalculated
+            // when all the buttons are there;
+            // naïve me would expect this not to be neccessary
+            lastButton.addListenerOnce(
+                'appear',
+                function(){
+                    var pane = this.getLayoutParent();
+                    this.fireDataEvent('resize', pane.getBounds());
+                },
+                this
+            );
         }
     }
 });

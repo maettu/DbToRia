@@ -39,7 +39,8 @@ qx.Class.define("dbtoria.Application", {
 
             // Enable logging in debug variant
             if ((qx.core.Environment.get("qx.debug"))) {
-                // support native logging capabilities, e.g. Firebug for Firefox
+                // support native logging capabilities,
+                // e.g. Firebug for Firefox
                 qx.log.appender.Native;
 
                 // support additional cross-browser console. Press F7
@@ -53,11 +54,14 @@ qx.Class.define("dbtoria.Application", {
             // Load config.
             // FIX ME: this must be smarter (wait for rpc to return)
             var config = dbtoria.data.Config.getInstance();
-            config.addListener('configUpdate',
-                               function() {
-                                   root.add(new dbtoria.module.Main(),
-                                            { edge : 0 });
-                               }, this);
+            config.addListener(
+                'configUpdate',
+                function() {
+                    root.add(new dbtoria.module.Main(),
+                    { edge : 0 });
+                },
+                this
+            );
             config.refresh();
         }
 

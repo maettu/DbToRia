@@ -36,7 +36,7 @@ qx.Class.define("dbtoria.module.desktop.Page", {
     extend : qx.ui.tabview.Page,
     construct : function() {
         this.base(arguments);
-	this.setShowCloseButton(true);
+	    this.setShowCloseButton(true);
         dbtoria.module.desktop.Desktop.getInstance().add(this);
     },
 
@@ -66,18 +66,21 @@ qx.Class.define("dbtoria.module.desktop.Page", {
                     this.getChildControl('stack').add(control);
                     break;
                 case "loader":
-                    control = new qx.ui.basic.Atom(null,"dbtoria/loader.gif").set({
-                        visibility: 'hidden',
-                        show: 'icon',
-                        backgroundColor: '#fcfcfc',
-                        opacity: 0.7,
-                        allowGrowX: true,
-                        allowGrowY: true,
-                        alignX: 'center',
-                        alignY: 'middle',
-                        center: true
-                    });
-                    this.getChildControl('pane'); // make sure pane is created first!
+                    control = new qx.ui.basic.Atom(
+                        null,"dbtoria/loader.gif").set({
+                            visibility: 'hidden',
+                            show: 'icon',
+                            backgroundColor: '#fcfcfc',
+                            opacity: 0.7,
+                            allowGrowX: true,
+                            allowGrowY: true,
+                            alignX: 'center',
+                            alignY: 'middle',
+                            center: true
+                        }
+                    );
+                    // make sure pane is created first!
+                    this.getChildControl('pane');
                     this.getChildControl('stack').add(control);
                     break;
             }
@@ -88,12 +91,11 @@ qx.Class.define("dbtoria.module.desktop.Page", {
             if (newValue == oldValue){
                 return;
             }
-            if (newValue){                                
+            if (newValue){
                 this.__runningTimer = qx.event.Timer.once(function(){
                     this.__runningTimer = null;
                     this.getChildControl('loader').show();
                 },this,200);
-//              this.__runningTimer.start();
             }
             else {
                 if (this.__runningTimer){

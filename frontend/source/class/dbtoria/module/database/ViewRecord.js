@@ -16,9 +16,6 @@
 #asset(qx/icon/${qx.icontheme}/16/actions/dialog-cancel.png)
 ************************************************************************ */
 
-// FIX ME:
-//   - documentation
-
 /**
  * Popup window for editing a database record.
  */
@@ -28,39 +25,48 @@ qx.Class.define("dbtoria.module.database.ViewRecord", {
     construct : function(tableId, tableName) {
         this.base(arguments);
 
-        this.set({
-            icon                 : 'icon/16/apps/utilities-text-editor.png',
-            caption              : this.tr('Edit record: %1', tableName)
-        });
-
+        this.set(
+            {
+                icon    : 'icon/16/apps/utilities-text-editor.png',
+                caption : this.tr(
+                'Edit record : %1', tableName)
+            }
+        );
     },
 
     events: {
         "saveRecord" : "qx.event.type.Data",
         "navigation"  : "qx.event.type.Data",
         "refresh"     : "qx.event.type.Data"
-    }, // events
+    },
 
     members : {
-
         cancel: function() {
-//            this._form.setFormDataChanged(false); // abort, don't save afterwards
             this.close();
         },
 
         _createActions: function() {
-            var btnCnl = new dbtoria.ui.form.Button(this.tr("Cancel"), "icon/16/actions/dialog-cancel.png",
-                                                    this.tr('Abort editing without saving'));
-            btnCnl.addListener("execute", this.cancel, this);
+            var btnCnl = new dbtoria.ui.form.Button(
+                this.tr("Cancel"),
+                "icon/16/actions/dialog-cancel.png",
+                this.tr('Abort editing without saving')
+            );
+            btnCnl.addListener(
+                "execute",
+                this.cancel,
+                this
+            );
 
-            var btnRow = new qx.ui.container.Composite(new qx.ui.layout.HBox(5));
+            var btnRow = new qx.ui.container.Composite(
+                new qx.ui.layout.HBox(5)
+            );
             btnRow.add(btnCnl);
             return btnRow;
         },
 
-        /* TODOC
+        /* TODO
          *
-         * @param record {var} TODOC
+         * @param record {var} TODO
          * @return {void}
          */
         viewRecord : function(recordId) {

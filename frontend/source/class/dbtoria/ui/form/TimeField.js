@@ -20,7 +20,9 @@ qx.Class.define("dbtoria.ui.form.TimeField", {
     construct : function() {
         this.base(arguments);
         this.set({
-            toolTip: new qx.ui.tooltip.ToolTip(qx.locale.Manager.tr('Use hh:mm or hh:mm::ss format.'))
+            toolTip: new qx.ui.tooltip.ToolTip(
+                qx.locale.Manager.tr('Use hh:mm or hh:mm::ss format.')
+            )
         });
     },
 

@@ -6,12 +6,12 @@
    Utf8Check: äöü
 ************************************************************************ */
 
-/* ************************************************************************
-************************************************************************ */
-
 qx.Class.define("dbtoria.ui.form.TextArea", {
     extend : qx.ui.form.TextArea,
-    include : [ dbtoria.ui.form.MControlSetter, dbtoria.ui.form.MControlProperties ],
+    include : [
+        dbtoria.ui.form.MControlSetter,
+        dbtoria.ui.form.MControlProperties
+    ],
 
     /**
      * Create a customized TextArea.
@@ -21,7 +21,9 @@ qx.Class.define("dbtoria.ui.form.TextArea", {
         this.base(arguments);
         // default tooltip
         this.set({
-            toolTip: new qx.ui.tooltip.ToolTip(qx.locale.Manager.tr('Use Ctrl-Enter for line breaks.')),
+            toolTip: new qx.ui.tooltip.ToolTip(
+                qx.locale.Manager.tr('Use Ctrl-Enter for line breaks.')
+            ),
             liveUpdate: true
         });
     },

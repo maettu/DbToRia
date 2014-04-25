@@ -8,7 +8,8 @@
 
 /**
  * Mixin for qx.ui.table.Table to fire events when the mouse is moved
- * for cell to cell (can for example be used for showing cell/header specific tooltips).
+ * for cell to cell (can for example be used for showing
+ * cell/header specific tooltips).
  */
 qx.Mixin.define("dbtoria.ui.table.MTableCellChange", {
     construct : function() {
@@ -60,7 +61,10 @@ qx.Mixin.define("dbtoria.ui.table.MTableCellChange", {
             var row = scroller._getRowForPagePos(pageX, pageY);
             var col = scroller._getColumnForPageX(pageX);
             if (col != this.__prevOverCol || row != this.__prevOverRow) {
-                this.fireDataEvent('cellChange', {'row' : row, 'col' : col, 'mouse' : e});
+                this.fireDataEvent(
+                    'cellChange',
+                    {'row' : row, 'col' : col, 'mouse' : e}
+                );
                 this.__prevOverCol = col;
                 this.__prevOverRow = row;
             }

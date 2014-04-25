@@ -31,18 +31,18 @@ qx.Class.define("dbtoria.ui.table.cellrenderer.Reference", {
 
 
     /*
-      *****************************************************************************
+      ********************************************************************
          MEMBERS
-      *****************************************************************************
+      ********************************************************************
       */
 
     members : {
         // overridden
         /**
-         * TODOC
+         * TODO
          *
-         * @param cellInfo {var} TODOC
-         * @return {var} TODOC
+         * @param cellInfo {var} TODO
+         * @return {var} TODO
          */
         _getContentHtml : function(cellInfo) {
             return ("<em>" + cellInfo.value + "</em>" || "");

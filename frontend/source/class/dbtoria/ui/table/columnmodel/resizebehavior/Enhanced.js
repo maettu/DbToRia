@@ -54,30 +54,28 @@ qx.Class.define("dbtoria.ui.table.columnmodel.resizebehavior.Enhanced", {
 
 
     /*
-        *****************************************************************************
-    	CONSTRUCTOR
-        *****************************************************************************
-        */
+    *******************************************************************
+    * CONSTRUCTOR
+    *******************************************************************
+    */
 
     construct : function() {
         this.base(arguments);
     },
 
-  properties :
-  {
-
-    tableColumnModel :
+    properties :
     {
-      check : "qx.ui.table.columnmodel.Resize"
-    }
+        tableColumnModel :
+        {
+            check : "qx.ui.table.columnmodel.Resize"
+        }
 
-  },
+    },
 
     /*
-        *****************************************************************************
-           MEMBERS
-        *****************************************************************************
-        */
+    *******************************************************************         * MEMBERS
+    *******************************************************************
+    */
 
     members : {
         // table reference
@@ -112,14 +110,14 @@ qx.Class.define("dbtoria.ui.table.columnmodel.resizebehavior.Enhanced", {
          * @return {void}
          */
         onAppear : function(event, forceRefresh) {
-//            this.debug('Enhanced.onAppear()');
             var tableColumnModel = this.getTableColumnModel();
             // set references for easy access
             this.__table = tableColumnModel.getTable();
             this.__tableModel = tableColumnModel.getTable().getTableModel();
             this.__tableColumnModel = tableColumnModel;
 
-            this.__tableWidth = this._getAvailableWidth(this.__tableColumnModel);
+            this.__tableWidth = this._getAvailableWidth(
+                this.__tableColumnModel);
 
             // recalculate column widths on sorting
             this.__tableModel.addListener("metaDataChanged", function(e) {
@@ -142,7 +140,8 @@ qx.Class.define("dbtoria.ui.table.columnmodel.resizebehavior.Enhanced", {
          * @return {void}
          */
         onTableWidthChanged : function(tableColumnModel, event) {
-            this.__tableWidth = this._getAvailableWidth(this.__tableColumnModel);
+            this.__tableWidth = this._getAvailableWidth(
+                this.__tableColumnModel);
             this._calculateColumnPercentage();
             this._revalidate();
         },
@@ -177,7 +176,8 @@ qx.Class.define("dbtoria.ui.table.columnmodel.resizebehavior.Enhanced", {
 
             // if it doesn't fit adjust last column
             if (this.__tableWidth - columnWidthSum > 0) {
-                var columnWidth = this.__tableColumnModel.getColumnWidth(numColumns - 1) + (this.__tableWidth - columnWidthSum);
+                var columnWidth = this.__tableColumnModel.getColumnWidth(
+                    numColumns - 1) + (this.__tableWidth - columnWidthSum);
                 this.__tableColumnModel.setColumnWidth(numColumns - 1, columnWidth);
             }
         },
@@ -206,7 +206,8 @@ qx.Class.define("dbtoria.ui.table.columnmodel.resizebehavior.Enhanced", {
 
 
         /**
-         * Calculate which percentage each column gets from total table width
+         * Calculate which percentage each column gets
+         * from total table width.
          *
          * @return {void}
          */
@@ -218,8 +219,12 @@ qx.Class.define("dbtoria.ui.table.columnmodel.resizebehavior.Enhanced", {
 
                 // use content length as indicator to column width if data is present
                 if (this.__tableModel.getRowCount() > 0) {
-                    // determine number of samples, max __numSamples, if there are less, use all available
-                    var numSamples = (this.__tableModel.getRowCount() < this.__numSamples) ? this.__tableModel.getRowCount() : this.__numSamples;
+                    // determine number of samples, max __numSamples;
+                    // if there are less use all available
+                    var numSamples = (
+                        this.__tableModel.getRowCount() < this.__numSamples)
+                            ? this.__tableModel.getRowCount()
+                            : this.__numSamples;
 
                     this.__cols = Array();
                     var rowData = Array();
@@ -240,13 +245,19 @@ qx.Class.define("dbtoria.ui.table.columnmodel.resizebehavior.Enhanced", {
 
                                 if (rowData[j]) {
                                     value = rowData[j][this.__tableModel.getColumnId(i)];
-                                    dataLength = ((typeof (value) == "string") || (typeof (value) == "number")) ? String(value).length + 10 : 0;
+                                    dataLength = ((typeof (value)
+                                        == "string")
+                                        || (typeof (value) == "number"))
+                                            ? String(value).length + 10
+                                            : 0;
                                 }
                                 else {
                                     dataLength = 0;
                                 }
 
-                                dataLength = (dataLength > 50) ? 50 : dataLength;
+                                dataLength = (dataLength > 50)
+                                    ? 50
+                                    : dataLength;
 
                                 max = Math.max(max, dataLength);
                                 this.__cols[i] = max;
@@ -259,13 +270,19 @@ qx.Class.define("dbtoria.ui.table.columnmodel.resizebehavior.Enhanced", {
 
                     for ( i=0; i<numColumns; i++) {
                         if (this.__tableColumnModel.isColumnVisible(i)) {
-                            var columnLength = this.__tableModel.getColumnName(i).length;
-                            this.__cols[i] = (columnLength > this.__cols[i]) ? columnLength : this.__cols[i];
+                            var columnLength =
+                                this.__tableModel.getColumnName(i).length;
+                            this.__cols[i] =
+                                (columnLength > this.__cols[i])
+                                    ? columnLength
+                                    : this.__cols[i];
+
                             rowSum += this.__cols[i];
                         }
                     }
 
-                    // calculate percentage from longest column name or row data
+                    // calculate percentage from longest column name
+                    // or row data
                     for ( i=0; i<numColumns; i++) {
                         if (this.__tableColumnModel.isColumnVisible(i)) {
                             this.__cols[i] = 1 / rowSum * this.__cols[i];
@@ -281,8 +298,10 @@ qx.Class.define("dbtoria.ui.table.columnmodel.resizebehavior.Enhanced", {
                     var columnNameSum = 0;
 
                     for ( i=0; i<numColumns; i++) {
-                        this.__cols[i] = this.__tableModel.getColumnName(i).length;
-                        columnNameSum += this.__tableModel.getColumnName(i).length;
+                        this.__cols[i] =
+                            this.__tableModel.getColumnName(i).length;
+                        columnNameSum +=
+                            this.__tableModel.getColumnName(i).length;
                     }
 
                     // calculate percentage
@@ -295,8 +314,10 @@ qx.Class.define("dbtoria.ui.table.columnmodel.resizebehavior.Enhanced", {
 
 
         /**
-         * Update widths for all columns. Depending on scrolling no/yes this is
-         *  done according to percentage of column data or based on each columns
+         * Update widths for all columns.
+         * Depending on scrolling no/yes this is
+         *  done according to percentage of column data or
+         * based on each columns
          *  name and data.
          *
          * @return {void}
@@ -304,23 +325,31 @@ qx.Class.define("dbtoria.ui.table.columnmodel.resizebehavior.Enhanced", {
         _updateColumnWidth : function() {
             var numColumns = this.__tableModel.getColumnCount();
             var i;
-            // if trying to arrange without scrollbar use percentage on tableWidth
+            // if trying to arrange without scrollbar use
+            // percentage on tableWidth
             if (!this.__scrolling) {
                 var columnWidthSum = 0;
 
                 // determine width for each column
                 for (i=0; i<numColumns; i++) {
                     if (this.__cols != null && this.__cols[i] != undefined) {
-                        var columnWidth = parseInt(this.__tableWidth * this.__cols[i]);
+                        var columnWidth =
+                            parseInt(this.__tableWidth * this.__cols[i]);
 
-                        // if last column, make pixel perfect if in feasible range (10px)
+                        // if last column
+                        // make pixel perfect if in feasible range (10px)
                         if (i + 1 == numColumns) {
-                            if (Math.abs(this.__tableWidth - columnWidthSum - columnWidth) < 10) {
-                                columnWidth = this.__tableWidth - columnWidthSum;
+                            if (Math.abs(this.__tableWidth
+                                    - columnWidthSum
+                                    - columnWidth) < 10) {
+
+                                columnWidth = this.__tableWidth
+                                                - columnWidthSum;
                             }
                         }
 
-                        this.__tableColumnModel.setColumnWidth(i, columnWidth);
+                        this.__tableColumnModel
+                                    .setColumnWidth(i, columnWidth);
                         columnWidthSum += columnWidth;
                     }
                 }
@@ -339,15 +368,21 @@ qx.Class.define("dbtoria.ui.table.columnmodel.resizebehavior.Enhanced", {
 
                 // determine column name width for each column
                 for (i=0; i<numColumns; i++) {
-                    var label = new qx.ui.basic.Label(this.__tableModel.getColumnName(i));
+                    var label = new qx.ui.basic.Label(
+                        this.__tableModel.getColumnName(i));
 
                     cols[i] = label.getSizeHint(true).width + 10;
                 }
 
-                // if there is row data consider it to size the column appropiately
+                // if there is row data consider it
+                // to size the column appropiately
                 if (this.__tableModel.getRowCount() > 0) {
-                    // determine number of samples, max __numSamples, if there are less, use all available
-                    var numSamples = (this.__tableModel.getRowCount() < this.__numSamples) ? this.__tableModel.getRowCount() : this.__numSamples;
+                    // determine number of samples, max __numSamples;
+                    // if there are less use all available
+                    var numSamples = (this.__tableModel.getRowCount()
+                        < this.__numSamples)
+                            ? this.__tableModel.getRowCount()
+                            : this.__numSamples;
 
                     // fetch row data
                     var rowData = Array();
@@ -358,20 +393,25 @@ qx.Class.define("dbtoria.ui.table.columnmodel.resizebehavior.Enhanced", {
 
                     var value = "";
 
-                    // check whether content needs larger width than column header
+                    // check whether content needs larger width than
+                    // column header
                     for (i=0; i<numColumns; i++) {
                         // determine needed width for content, max 200px
-                        // possibly expensive, especially if numSamples is large
+                        // possibly expensive, especially
+                        // if numSamples is large
                         var max = 0;
 
                         for (var j=0; j<numSamples; j++) {
                             value = rowData[j][this.__tableModel.getColumnId(i)];
-                            if (j==0) {
-//                                this.debug('column='+this.__tableModel.getColumnId(i)+', typeof(value)='+typeof(value));
-                            }
-                            if ((typeof (value) == "string") || (typeof (value) == "number")) {
-                                var label = new qx.ui.basic.Label(String(value));
-                                var width = (label.getSizeHint(true).width < 400) ? (label.getSizeHint(true).width) + 20 : 400;
+                            if ((typeof (value) == "string")
+                                    || (typeof (value) == "number")) {
+
+                                var label =
+                                    new qx.ui.basic.Label(String(value));
+                                var width =
+                                    (label.getSizeHint(true).width < 400)
+                                        ? (label.getSizeHint(true).width) + 20
+                                        : 400;
 
                                 max = Math.max(max, width);
                             }
@@ -425,15 +465,18 @@ qx.Class.define("dbtoria.ui.table.columnmodel.resizebehavior.Enhanced", {
                 if (this.__tableColumnModel.isColumnVisible(i)) {
                     sum += this.__tableColumnModel.getColumnWidth(i);
 
-                    var label = new qx.ui.basic.Label(this.__tableModel.getColumnName(i));
+                    var label = new qx.ui.basic.Label(
+                        this.__tableModel.getColumnName(i));
 
-                    if (label.getSizeHint(true).width - 10 > this.__tableColumnModel.getColumnWidth(i)) {
+                    if (label.getSizeHint(true).width - 10
+                            > this.__tableColumnModel.getColumnWidth(i)) {
                         cropped++;
                     }
                 }
             }
 
-            return (cropped > 1 && sum >= this._getAvailableWidth(this.__tableColumnModel));
+            return (cropped > 1 && sum
+                >= this._getAvailableWidth(this.__tableColumnModel));
         }
     }
 });

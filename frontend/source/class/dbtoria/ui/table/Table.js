@@ -7,15 +7,15 @@
 
 ************************************************************************ */
 
-/*
-*/
-
 /**
  * Create a table according to the instructions provided.
  */
 qx.Class.define("dbtoria.ui.table.Table", {
     extend  : qx.ui.table.Table,
-    include : [ qx.ui.table.MTableContextMenu, dbtoria.ui.table.MTableCellChange ],
+    include : [
+        qx.ui.table.MTableContextMenu,
+        dbtoria.ui.table.MTableCellChange
+    ],
 
     construct : function(tm, tableId) {
         this.__tableId = tableId;
@@ -30,17 +30,8 @@ qx.Class.define("dbtoria.ui.table.Table", {
             decorator              : null
         });
         this.getDataRowRenderer().setHighlightFocusRow(false);
-//        this.getTableColumnModel().setBehavior(new dbtoria.ui.table.columnmodel.resizebehavior.Enhanced());
 
         this.__createTooltip();
-        // var tableModel = this.getTableModel();
-        // this.addListener('appear', function() {
-        //     tableModel.setVisible(true);
-        //     tableModel.reloadData();
-        // }, this);
-        // this.addListener('disappear', function() {
-        //     tableModel.setVisible(false);
-        // }, this);
     },
 
     members: {

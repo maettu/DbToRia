@@ -6,12 +6,13 @@
    Utf8Check: äöü
 ************************************************************************ */
 
-/* ************************************************************************
-************************************************************************ */
 
 qx.Class.define("dbtoria.ui.form.ComboTable", {
     extend : combotable.ComboTable,
-    include : [ dbtoria.ui.form.MControlProperties, dbtoria.ui.form.MControlReadOnly ],
+    include : [
+        dbtoria.ui.form.MControlProperties,
+        dbtoria.ui.form.MControlReadOnly
+    ],
 
     /**
      * @param tableModel {} table model to use.
@@ -23,8 +24,11 @@ qx.Class.define("dbtoria.ui.form.ComboTable", {
         var l = {};
         l[desc.idCol] = 'id';
         l[desc.valueCol] = 'value';
-        var tableModel = new dbtoria.data.RemoteTableModel(desc.tableId,
-                                                           [desc.idCol,desc.valueCol], l);
+        var tableModel = new dbtoria.data.RemoteTableModel(
+            desc.tableId,
+            [desc.idCol,desc.valueCol],
+            l
+        );
         this.base(arguments, tableModel);
     },
 
@@ -38,7 +42,12 @@ qx.Class.define("dbtoria.ui.form.ComboTable", {
         },
 
         setter: function(value) {
-            if (value == null || value.id == undefined || value.id == null) {
+            if (value == null
+                      ||
+                value.id == undefined
+                      ||
+                value.id == null) {
+
                 this.setModel(null);
                 this.setValue(qx.locale.Manager.tr('Select'));
             }
@@ -54,7 +63,10 @@ qx.Class.define("dbtoria.ui.form.ComboTable", {
         },
 
         validator: function(value,control){
-            if (value == qx.locale.Manager.tr('Select') && !control.getRequired()) {
+            if (value == qx.locale.Manager.tr('Select')
+                      &&
+                !control.getRequired()) {
+
                 control.setValid(true);
                 return true;
             }

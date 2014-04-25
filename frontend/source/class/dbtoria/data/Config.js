@@ -32,24 +32,24 @@ qx.Class.define( 'dbtoria.data.Config',
     */
     construct: function () {
         this.base(arguments);
-    }, // construct
+    },
 
 
     properties: {
-        filterOps: { init: [],
-                     // check: "String",
-                     nullable: true
-                  },
-        refDelay: { init: null,
-//~                     check: "Integer",
-                    nullable: true
-                  }
+        filterOps: {
+            init     : [],
+            nullable : true
+        },
+        refDelay: {
+            init     : null,
+            nullable : true
+        }
     },
 
 
     events: {
         "configUpdate" : "qx.event.type.Event"
-    }, // events
+    },
 
 
     members: {
@@ -66,8 +66,10 @@ qx.Class.define( 'dbtoria.data.Config',
             }
             this.__loading = true;
             var rpc = dbtoria.data.Rpc.getInstance();
-            rpc.callAsync( qx.lang.Function.bind(this.__refreshHandler, this),
-                           'getConfig');
+            rpc.callAsync(
+                qx.lang.Function.bind(this.__refreshHandler, this),
+                'getConfig'
+            );
         },
 
         /**

@@ -5,9 +5,6 @@
    Utf8Check: äöü
 ************************************************************************ */
 
-/* ************************************************************************
-************************************************************************ */
-
 qx.Class.define("dbtoria.ui.form.ControlBuilder", {
     type : 'static',
 
@@ -15,25 +12,25 @@ qx.Class.define("dbtoria.ui.form.ControlBuilder", {
         /**
          * create a control and bind its value to the formData map
          *
-         * @param desc {var} TODOC
-         * @param formData {var} TODOC
-         * @return {var} TODOC
-         * @throws TODOC
+         * @param desc {var} TODO
+         * @param formData {var} TODO
+         * @return {var} TODO
+         * @throws TODO
          *
          * returns a control according to the description given
          *
          * <pre class='javascript'>
          * { type:    "TextArea",
-         *   TODOC
+         *   TODO
          * },
          * { type:    "IntField",
-         *   TODOC
+         *   TODO
          * },
          * { type:    "FloatField",
-         *   TODOC
+         *   TODO
          * },
          * { type:    "TimeField",
-         *   TODOC
+         *   TODO
          * },
          * { type:    "TextField",
          *   label:   "Label",
@@ -46,7 +43,7 @@ qx.Class.define("dbtoria.ui.form.ControlBuilder", {
          *   label:   "Label",
          *   name:    "key"},
          * { type:    "ComboTable",
-         *   TODOC
+         *   TODO
          * },
          * </pre>
          *
@@ -55,9 +52,6 @@ qx.Class.define("dbtoria.ui.form.ControlBuilder", {
         createControl : function(desc, formDataCallback) {
             var control = null;
 
-//            if (desc.copy) {
-//                qx.dev.Debug.debugObject(desc);
-//            }
             switch(desc.type) {
                 case "TextField":
                     control = new dbtoria.ui.form.TextField();
@@ -87,7 +81,9 @@ qx.Class.define("dbtoria.ui.form.ControlBuilder", {
                     control = new dbtoria.ui.form.ComboTable(desc);
                     break;
                 default:
-                    throw new Error("Control '" + desc.type + "' is not yet supported");
+                    throw new Error(
+                        "Control '" + desc.type + "' is not yet supported"
+                    );
                     break;
             }
 
@@ -137,10 +133,10 @@ qx.Class.define("dbtoria.ui.form.ControlBuilder", {
         },
 
         /**
-         * TODOC
+         * TODO
          *
-         * @param control {var} TODOC
-         * @param data {var} TODOC
+         * @param control {var} TODO
+         * @param data {var} TODO
          * @return {void}
          */
         _addListItems : function(control, data) {
@@ -163,10 +159,10 @@ qx.Class.define("dbtoria.ui.form.ControlBuilder", {
 
 
         /**
-         * TODOC
+         * TODO
          *
-         * @param control {var} TODOC
-         * @param data {var} TODOC
+         * @param control {var} TODO
+         * @param data {var} TODO
          * @return {void}
          */
         _addCheckItems : function(control, data) {
@@ -188,14 +184,16 @@ qx.Class.define("dbtoria.ui.form.ControlBuilder", {
 
 
         /**
-         * TODOC
+         * TODO
          *
-         * @param x {var} TODOC
-         * @return {var} TODOC
+         * @param x {var} TODO
+         * @return {var} TODO
          */
         _vtr : function(x) {
             var trans = qx.locale.Manager;
-            return x.translate ? x : trans['tr'](x);
+            return x.translate
+                    ? x
+                    : trans['tr'](x);
         }
     }
 });

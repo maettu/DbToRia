@@ -85,7 +85,9 @@ qx.Class.define("dbtoria.ui.dialog.Login", {
             column : 2
         });
 
-        var login = new qx.ui.form.Button("Login", "icon/16/actions/dialog-ok.png");
+        var login = new qx.ui.form.Button(
+            "Login", "icon/16/actions/dialog-ok.png"
+        );
 
         login.set({
             marginTop  : 6,
@@ -112,10 +114,17 @@ qx.Class.define("dbtoria.ui.dialog.Login", {
         login.addListener("execute", function(e) {
             this.setEnabled(false);
 
-            rpc.callAsync(qx.lang.Function.bind(this.__loginHandler, this), 'login', {
-                username : username.getValue(),
-                password : password.getValue()
-            });
+            rpc.callAsync(
+                qx.lang.Function.bind(
+                    this.__loginHandler,
+                    this
+                ),
+                'login',
+                {
+                    username : username.getValue(),
+                    password : password.getValue()
+                }
+            );
         },
         this);
 
@@ -151,7 +160,8 @@ qx.Class.define("dbtoria.ui.dialog.Login", {
         /**
          * Handler for the login events
          *
-         * @param ret {Boolean} true if the login is ok and false if it is not ok.
+         * @param ret {Boolean} true if the login is ok
+         * and false if it is not ok.
          * @param exc {Exception} any error found during the login process.
          * @return {void}
          */
@@ -162,7 +172,7 @@ qx.Class.define("dbtoria.ui.dialog.Login", {
             }
             else {
                 var element = this.getContentElement().getDomElement();
-                var pos = qx.bom.element.Location.getLeft(element);
+                var pos     = qx.bom.element.Location.getLeft(element);
 
                 if (ret) {
                     this.fireDataEvent('login', ret);
@@ -171,7 +181,7 @@ qx.Class.define("dbtoria.ui.dialog.Login", {
                	     	keep: 100,
                      	keyFrames : {
                              0 : {"opacity" : 1},
-                           100 : {"opacity": 0, display: "none"}
+                           100 : {"opacity" : 0, display : "none"}
                          },
                          timing: "ease-out"
                     };
@@ -197,7 +207,10 @@ qx.Class.define("dbtoria.ui.dialog.Login", {
                         }
                     };
 
-                    var effect = qx.bom.element.Animation.animate(element, shake);
+                    var effect = qx.bom.element.Animation.animate(
+                        element,
+                        shake
+                    );
                     effect.addListener('end', function() {
                         this.__username.setValue(null);
                         this.__password.setValue(null);

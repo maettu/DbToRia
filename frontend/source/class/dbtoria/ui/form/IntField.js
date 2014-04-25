@@ -6,12 +6,12 @@
    Utf8Check: äöü
 ************************************************************************ */
 
-/* ************************************************************************
-************************************************************************ */
-
 qx.Class.define("dbtoria.ui.form.IntField", {
     extend : qx.ui.form.TextField,
-    include : [ dbtoria.ui.form.MControlSetter, dbtoria.ui.form.MControlProperties ],
+    include : [
+        dbtoria.ui.form.MControlSetter,
+        dbtoria.ui.form.MControlProperties
+    ],
 
     /**
      * Create a customized TextField for integer values.
@@ -28,7 +28,12 @@ qx.Class.define("dbtoria.ui.form.IntField", {
                 return true;
             }
             var msg = qx.locale.Manager.tr('This field must be an integer.');
-            var valid = (value != null) && (!isNaN(Number(value)) && value == Math.round(value));
+            var valid = (value != null)
+                            &&
+                        (!isNaN(Number(value))
+                            &&
+                        value == Math.round(value));
+
             if (!valid){
                 control.setInvalidMessage(msg);
                 control.setValid(valid);

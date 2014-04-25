@@ -14,8 +14,8 @@ qx.Class.define("dbtoria.ui.form.renderer.Monster", {
 
 
     /**
-                     * @param form {Object} form handle
-                     */
+    * @param form {Object} form handle
+    */
     construct : function(form) {
         this.base(arguments, form);
         this.set({ padding : [ 7, 7, 7, 7 ] });
@@ -30,7 +30,8 @@ qx.Class.define("dbtoria.ui.form.renderer.Monster", {
          *
          * @param name {String} The content of the label without the
          *                 trailing * and :
-         * @param item {qx.ui.core.Widget} The item, which has the required state.
+         * @param item {qx.ui.core.Widget} The item
+         * which has the required state.
          * @return {qx.ui.basic.Label} The label for the given item.
          */
         _createLabel : function(name, item) {
@@ -40,7 +41,8 @@ qx.Class.define("dbtoria.ui.form.renderer.Monster", {
                 required = "*";
             }
 
-            var label = new qx.ui.basic.Label(name + required).set({ alignY : 'middle' });
+            var label = new qx.ui.basic.Label(
+                name + required).set({ alignY : 'middle' });
             return label;
         }
     }

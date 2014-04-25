@@ -48,7 +48,6 @@ qx.Class.define("dbtoria.module.database.AbstractRecord", {
             contentPaddingBottom : 10,
             layout               : new qx.ui.layout.VBox(10),
             minWidth             : 400,
-//             maxHeight           : maxHeight,
             height           : maxHeight,
             allowGrowX : true,
             allowGrowY : true
@@ -79,19 +78,17 @@ qx.Class.define("dbtoria.module.database.AbstractRecord", {
     },
 
     events: {
-//        "saveRecord" : "qx.event.type.Data",
-//        "refresh"     : "qx.event.type.Data"
         "navigation"  : "qx.event.type.Data"
-    }, // events
+    },
 
     members : {
-        _form            : null,
+        _form             : null,
         __formModel       : null,
         __scrollContainer : null,
         __tableId         : null,
         __tableName       : null,
-        _recordId        : null,
-        _rpc             : null,
+        _recordId         : null,
+        _rpc              : null,
         __readOnly        : null,
 
         _initForm: function() {
@@ -108,18 +105,36 @@ qx.Class.define("dbtoria.module.database.AbstractRecord", {
         },
 
         _createNavigation: function(readOnly) {
-            var btnFirst = this.__createButton("icon/16/actions/go-first.png",
-                                               this.tr("Jump to first record"),  'first');
-            var btnBack  = this.__createButton("icon/16/actions/go-previous.png",
-                                               this.tr("Go to previous record"), 'back');
-            var btnNext  = this.__createButton("icon/16/actions/go-next.png",
-                                               this.tr("Go to next record"),     'next');
-            var btnLast  = this.__createButton("icon/16/actions/go-last.png",
-                                               this.tr("Jump to last record"),   'last');
-            var btnNew   = this.__createButton("icon/16/actions/help-about.png",
-                                               this.tr("Open new record"),       'new');
+            var btnFirst = this.__createButton(
+                "icon/16/actions/go-first.png",
+                this.tr("Jump to first record"),
+                'first'
+            );
+            var btnBack  = this.__createButton(
+                "icon/16/actions/go-previous.png",
+                this.tr("Go to previous record"),
+                'back'
+            );
+            var btnNext  = this.__createButton(
+                "icon/16/actions/go-next.png",
+                this.tr("Go to next record"),
+                'next'
+            );
+            var btnLast  = this.__createButton(
+                "icon/16/actions/go-last.png",
+                this.tr("Jump to last record"),
+                'last'
+            );
+            var btnNew   = this.__createButton(
+                "icon/16/actions/help-about.png",
+                this.tr("Open new record"),
+                'new'
+            );
 
-            var btnRow = new qx.ui.container.Composite(new qx.ui.layout.HBox(5));
+            var btnRow = new qx.ui.container.Composite(
+                new qx.ui.layout.HBox(5)
+            );
+
             btnRow.add(btnFirst);
             btnRow.add(btnBack);
             btnRow.add(btnNext);
@@ -130,9 +145,9 @@ qx.Class.define("dbtoria.module.database.AbstractRecord", {
             return btnRow;
         },
 
-        /* TODOC
+        /* TODO
          *
-         * @param record {var} TODOC
+         * @param record {var} TODO
          * @return {void}
          */
         setRecord : function(recordId) {
@@ -151,12 +166,16 @@ qx.Class.define("dbtoria.module.database.AbstractRecord", {
         },
 
         /**
-         * TODOC
+         * TODO
          *
          * @return {void}
          */
         __setFormData : function(recordId, action) {
-            this.debug('Called __setFormData(): record='+recordId+', action='+action);
+            this.debug(
+                'Called __setFormData(): record='+recordId+',
+                action='+action
+            );
+
             this.setLoading(true);
             var that = this;
             var setFormDataHandler = function(data, exc, id) {
@@ -175,19 +194,25 @@ qx.Class.define("dbtoria.module.database.AbstractRecord", {
                 }
                 that.setLoading(false);
             };
-            this._rpc.callAsync(setFormDataHandler, 'getRecordDeref', this.__tableId, recordId);
+            this._rpc.callAsync(
+                setFormDataHandler,
+                'getRecordDeref',
+                this.__tableId,
+                recordId
+            );
          },
 
         /**
-         * TODOC
+         * TODO
          *
-         * @param rules {var} TODOC
+         * @param rules {var} TODO
          * @return {void}
          */
         _fillForm : function(rules) {
             var form         = new dbtoria.ui.form.AutoForm(rules);
             if (this.__readOnly) {
-                // only for readOnly forms, otherwise readOnly fields would get enabled
+                // only for readOnly forms,
+                // otherwise readOnly fields would get enabled
                 form.setReadOnly(this.__readOnly);
             }
             this.__formModel = form.getFormData();

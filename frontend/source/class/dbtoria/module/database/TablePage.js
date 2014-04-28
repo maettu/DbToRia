@@ -512,21 +512,21 @@ qx.Class.define("dbtoria.module.database.TablePage", {
             var tm  = this.__table.getTableModel();
             var row = sm.getSelectedRanges()[0].minIndex;
             tm.removeRow(row);
-            // TODO find out how this can highlight the next row
-            sm.resetSelection();
             // select next row
-            var rowInfo = tm.getRowData(row);
-            // ..fails for last item in list, because there is no "next"
-            if (!rowInfo){
-                rowInfo = tm.getRowData(row-1);
+            // ..fails for last item in list, because there is no "next"..
+            if (!tm.getRowData(row)){
+                //..therefore select previous
+                row--;
             }
-            // still fails when there is only one row..
-            if (!rowInfo){
+            // still fails if there was only one row..
+            if (!tm.getRowData(row)){
                 this._currentId = null;
+                // ..do not select any row, because there isn't any row.
+                return;
             }
-            else {
-                this.__currentId = rowInfo['ROWINFO'][0];
-            }
+            var rowInfo = tm.getRowData(row);
+            this.__currentId = rowInfo['ROWINFO'][0];
+            sm.setSelectionInterval(row, row);
         },
 
         __cloneRecordHandler: function(e) {
@@ -639,7 +639,7 @@ qx.Class.define("dbtoria.module.database.TablePage", {
                 currentRow = currentSelection.minIndex;
             }
             else{
-                currentRow = 0;
+                currentRow = 0;
             }
 
             selMod.iterateSelection(function(ind) {

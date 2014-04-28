@@ -513,7 +513,17 @@ qx.Class.define("dbtoria.module.database.TablePage", {
             var row = sm.getSelectedRanges()[0].minIndex;
             tm.removeRow(row);
             sm.resetSelection();
+            // select next row
             var rowInfo = tm.getRowData(row);
+            // ..fails for last item in list, because there is no "next"
+            if (!rowInfo){
+                rowInfo = tm.getRowData(row-1);
+            }
+            // still fails when there is only one row..
+            if (!rowInfo){
+                this._currentId = null;
+                return;
+            }
             this.__currentId = rowInfo['ROWINFO'][0];
         },
 

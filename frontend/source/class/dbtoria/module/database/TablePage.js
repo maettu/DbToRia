@@ -512,6 +512,7 @@ qx.Class.define("dbtoria.module.database.TablePage", {
             var tm  = this.__table.getTableModel();
             var row = sm.getSelectedRanges()[0].minIndex;
             tm.removeRow(row);
+            // TODO find out how this can highlight the next row
             sm.resetSelection();
             // select next row
             var rowInfo = tm.getRowData(row);
@@ -522,9 +523,10 @@ qx.Class.define("dbtoria.module.database.TablePage", {
             // still fails when there is only one row..
             if (!rowInfo){
                 this._currentId = null;
-                return;
             }
-            this.__currentId = rowInfo['ROWINFO'][0];
+            else {
+                this.__currentId = rowInfo['ROWINFO'][0];
+            }
         },
 
         __cloneRecordHandler: function(e) {
@@ -635,6 +637,9 @@ qx.Class.define("dbtoria.module.database.TablePage", {
 
             if (currentSelection != null && currentSelection != undefined) {
                 currentRow = currentSelection.minIndex;
+            }
+            else{
+                currentRow = 0;
             }
 
             selMod.iterateSelection(function(ind) {

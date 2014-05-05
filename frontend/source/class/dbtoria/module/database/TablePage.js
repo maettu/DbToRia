@@ -107,7 +107,7 @@ qx.Class.define("dbtoria.module.database.TablePage", {
         __refDelay           : null,
         __refTimer           : null,
 
-        __filterButtonMB     : null,
+        __filterButton     : null,
 
         __cellChange: function(e) {
             this.__refTimer.stop();
@@ -392,7 +392,7 @@ qx.Class.define("dbtoria.module.database.TablePage", {
                 this
             );
             toolbar.add(filterButton);
-            this.__filterButtonMB = filterButton;
+            this.__filterButton = filterButton;
 
             this.add(toolbar);
             var that = this;
@@ -624,7 +624,7 @@ qx.Class.define("dbtoria.module.database.TablePage", {
                     function(filter) {
                         that.__table.getTableModel().setFilter(filter);
 
-                        that.__filterButtonMB.setLabel(
+                        that.__filterButton.setLabel(
                             // "this" is TableFilter
                             this.__numFiltersActive() + " Filter"
                         );
@@ -632,7 +632,6 @@ qx.Class.define("dbtoria.module.database.TablePage", {
                 );
             }
 
-            console.log(this.__filter.__getFilter());
         },
 
         __switchRecord : function(e) {

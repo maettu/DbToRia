@@ -107,6 +107,8 @@ qx.Class.define("dbtoria.module.database.TablePage", {
         __refDelay           : null,
         __refTimer           : null,
 
+        __filterButtonMB     : null,
+
         __cellChange: function(e) {
             this.__refTimer.stop();
             var data = e.getData();
@@ -331,9 +333,8 @@ qx.Class.define("dbtoria.module.database.TablePage", {
                 "icon/16/actions/document-print.png"
             ).set({enabled: false});
 
-//~             var filterButton = new qx.ui.toolbar.CheckBox(
             var filterButton = new qx.ui.toolbar.Button(
-                this.tr("Filter"), "icon/16/actions/system-search.png"
+                this.tr("0 Filter"), "icon/16/actions/system-search.png"
             );
 
             if (readOnly) {
@@ -391,6 +392,7 @@ qx.Class.define("dbtoria.module.database.TablePage", {
                 this
             );
             toolbar.add(filterButton);
+            this.__filterButtonMB = filterButton;
 
             this.add(toolbar);
             var that = this;
@@ -611,7 +613,6 @@ qx.Class.define("dbtoria.module.database.TablePage", {
         __filterTable : function(e) {
             var that = this;
             if (this.__filter) {
-                console.log('ajkshdgf');
                 this.__filter.open();
             }
             else {
@@ -622,9 +623,16 @@ qx.Class.define("dbtoria.module.database.TablePage", {
                     this.__columns,
                     function(filter) {
                         that.__table.getTableModel().setFilter(filter);
+
+                        that.__filterButtonMB.setLabel(
+                            // "this" is TableFilter
+                            this.__numFiltersActive() + " Filter"
+                        );
                     }
                 );
             }
+
+            console.log(this.__filter.__getFilter());
         },
 
         __switchRecord : function(e) {

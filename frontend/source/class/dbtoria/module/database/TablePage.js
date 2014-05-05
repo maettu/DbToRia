@@ -624,9 +624,12 @@ qx.Class.define("dbtoria.module.database.TablePage", {
                     function(filter) {
                         that.__table.getTableModel().setFilter(filter);
 
+                        // TODO: distinguish singular / plural
                         that.__filterButton.setLabel(
                             // "this" is TableFilter
-                            this.__numFiltersActive() + " Filter"
+                            this.tr(
+                                 "%1 Filter", this.__numFiltersActive()
+                            )
                         );
                     }
                 );

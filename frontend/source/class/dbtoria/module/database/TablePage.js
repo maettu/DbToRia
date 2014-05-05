@@ -331,7 +331,8 @@ qx.Class.define("dbtoria.module.database.TablePage", {
                 "icon/16/actions/document-print.png"
             ).set({enabled: false});
 
-            var filterButton = new qx.ui.toolbar.CheckBox(
+//~             var filterButton = new qx.ui.toolbar.CheckBox(
+            var filterButton = new qx.ui.toolbar.Button(
                 this.tr("Filter"), "icon/16/actions/system-search.png"
             );
 
@@ -598,6 +599,7 @@ qx.Class.define("dbtoria.module.database.TablePage", {
         },
 
         __newRecord : function(e) {
+            console.log('start new record');
             this.__recordEdit.addListenerOnce(
                 'saveRecord',
                 this.__newRecordHandler,
@@ -609,6 +611,7 @@ qx.Class.define("dbtoria.module.database.TablePage", {
         __filterTable : function(e) {
             var that = this;
             if (this.__filter) {
+                console.log('ajkshdgf');
                 this.__filter.open();
             }
             else {

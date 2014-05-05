@@ -242,6 +242,20 @@ qx.Class.define("dbtoria.module.database.TableFilter", {
             this.__rowCounter++;
         },
 
+        /**
+         * return number of active filters
+         */
+        __numFiltersActive : function() {
+            var numFiltersActive = 0;
+
+            for (var i=0; i<this.__selection.length; i++) {
+                var selection = this.__selection[i];
+                if (selection.checkBox.getValue()){
+                    numFiltersActive++;
+                }
+            }
+            return numFiltersActive;
+        },
 
         /**
          * Callback for changeSelection on opSelectBox
